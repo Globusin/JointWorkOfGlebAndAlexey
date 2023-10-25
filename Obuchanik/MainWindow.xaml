@@ -42,6 +42,10 @@
         </Border>
 
         <Border x:Name="BorderMain" CornerRadius="10" Background="#F4FCC4" Margin="10" Grid.Column="2">
+            <Canvas>
+                <Grid x:Name="mainGrid">
+                </Grid>
+            </Canvas>
         </Border>
     </Grid>
 </Window>
