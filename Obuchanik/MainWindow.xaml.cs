@@ -25,13 +25,21 @@ namespace Obuchanik
             InitializeComponent();
         }
 
+        int count = 0;
+
         private void Btn_clic_plus(object sender, RoutedEventArgs e)
         {
             mainGrid.Children.Clear();
 
-            Button btnAddNewTest = new Button();
-            btnAddNewTest.Content = "Новый тест";
-            StPnTests.Children.Add(btnAddNewTest);
+            count++;//считаем количество созданных тестов 
+
+            Button btnNewTest = new Button();
+            btnNewTest.Content = "Новый тест " + $"{count}";
+            btnNewTest.Name = "Test" + $"{count}";
+            StPnTests.Children.Add(btnNewTest);
+
+            //вариант как можно подключить для кнопки обработчик событий
+            btnNewTest.Click += new RoutedEventHandler(BtnTest_Clic);
 
             RowDefinition rowDefinition1 = new RowDefinition();
             RowDefinition rowDefinition2 = new RowDefinition();
@@ -42,20 +50,27 @@ namespace Obuchanik
             mainGrid.RowDefinitions.Add(rowDefinition3);
 
             Label newTestLabel = new Label();
-            newTestLabel.Content = "Новый тест";
+            newTestLabel.Content = "Новый тест " + $"{count}";
             newTestLabel.FontSize = 25;
             newTestLabel.Margin = new Thickness(300, 5, 200, 10);
 
             Grid.SetRow(newTestLabel, 0);
             mainGrid.Children.Add(newTestLabel);
 
-            this.Show();
+            //this.Show();
 
             //Label nameNewTest = new Label();
             //BorderMain.Child = nameNewTest;
             //newTestLabel.Content = "Введите название:";
             //newTestLabel.FontSize = 20;
             //newTestLabel.Margin = new Thickness(350, 500, 200, 10);
+        }
+
+        //самодельно написанный обработчик нажатия на кнопку созданную в стек панеле
+        private void BtnTest_Clic(object sender, RoutedEventArgs e)
+        {
+            Button current = (Button)sender;
+            
         }
     }
 }

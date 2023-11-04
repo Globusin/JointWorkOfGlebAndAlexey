@@ -47,3 +47,36 @@ E:\Проги\Obuchalnik\Obuchanik\Obuchanik\obj\Debug\Obuchanik.csproj.Generate
 E:\Проги\Obuchalnik\Obuchanik\Obuchanik\obj\Debug\Obuchanik.csproj.CoreCompileInputs.cache
 E:\Проги\Obuchalnik\Obuchanik\Obuchanik\obj\Debug\Obuchanik.exe
 E:\Проги\Obuchalnik\Obuchanik\Obuchanik\obj\Debug\Obuchanik.pdb
+C:\Local_Rep_KB3\JointWorkOfGlebAndAlexey\JointWorkOfGlebAndAlexey\Obuchanik\bin\Debug\Obuchanik.exe.config
+C:\Local_Rep_KB3\JointWorkOfGlebAndAlexey\JointWorkOfGlebAndAlexey\Obuchanik\bin\Debug\Obuchanik.exe
+C:\Local_Rep_KB3\JointWorkOfGlebAndAlexey\JointWorkOfGlebAndAlexey\Obuchanik\bin\Debug\Obuchanik.pdb
+C:\Local_Rep_KB3\JointWorkOfGlebAndAlexey\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\Obuchanik.csproj.AssemblyReference.cache
+C:\Local_Rep_KB3\JointWorkOfGlebAndAlexey\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\MainWindow.g.cs
+C:\Local_Rep_KB3\JointWorkOfGlebAndAlexey\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\App.g.cs
+C:\Local_Rep_KB3\JointWorkOfGlebAndAlexey\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\Obuchanik_MarkupCompile.cache
+C:\Local_Rep_KB3\JointWorkOfGlebAndAlexey\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\Obuchanik_MarkupCompile.lref
+C:\Local_Rep_KB3\JointWorkOfGlebAndAlexey\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\App.baml
+C:\Local_Rep_KB3\JointWorkOfGlebAndAlexey\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\MainWindow.baml
+C:\Local_Rep_KB3\JointWorkOfGlebAndAlexey\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\Obuchanik.g.resources
+C:\Local_Rep_KB3\JointWorkOfGlebAndAlexey\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\Obuchanik.Properties.Resources.resources
+C:\Local_Rep_KB3\JointWorkOfGlebAndAlexey\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\Obuchanik.csproj.GenerateResource.cache
+C:\Local_Rep_KB3\JointWorkOfGlebAndAlexey\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\Obuchanik.csproj.CoreCompileInputs.cache
+C:\Local_Rep_KB3\JointWorkOfGlebAndAlexey\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\Obuchanik.exe
+C:\Local_Rep_KB3\JointWorkOfGlebAndAlexey\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\Obuchanik.pdb
+E:\Работы по прог 4 семестр\JointWorkOfGlebAndAlexey\Obuchanik\bin\Debug\Obuchanik.exe.config
+E:\Работы по прог 4 семестр\JointWorkOfGlebAndAlexey\Obuchanik\bin\Debug\Obuchanik.exe
+E:\Работы по прог 4 семестр\JointWorkOfGlebAndAlexey\Obuchanik\bin\Debug\Obuchanik.pdb
+E:\Работы по прог 4 семестр\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\Obuchanik.csproj.AssemblyReference.cache
+E:\Работы по прог 4 семестр\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\Obuchanik.csproj.SuggestedBindingRedirects.cache
+E:\Работы по прог 4 семестр\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\MainWindow.g.cs
+E:\Работы по прог 4 семестр\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\App.g.cs
+E:\Работы по прог 4 семестр\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\Obuchanik_MarkupCompile.cache
+E:\Работы по прог 4 семестр\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\Obuchanik_MarkupCompile.lref
+E:\Работы по прог 4 семестр\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\App.baml
+E:\Работы по прог 4 семестр\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\MainWindow.baml
+E:\Работы по прог 4 семестр\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\Obuchanik.g.resources
+E:\Работы по прог 4 семестр\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\Obuchanik.Properties.Resources.resources
+E:\Работы по прог 4 семестр\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\Obuchanik.csproj.GenerateResource.cache
+E:\Работы по прог 4 семестр\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\Obuchanik.csproj.CoreCompileInputs.cache
+E:\Работы по прог 4 семестр\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\Obuchanik.exe
+E:\Работы по прог 4 семестр\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\Obuchanik.pdb
