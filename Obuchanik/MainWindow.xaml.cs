@@ -34,6 +34,8 @@ namespace Obuchanik
 
             count++;//считаем количество созданных тестов 
 
+
+            //создаем кнопки
             Button btnNewTest = new Button();
             btnNewTest.Content = "Новый тест " + $"{count}";
             btnNewTest.Name = "Test" + $"{count}";
