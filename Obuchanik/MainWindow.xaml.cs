@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +37,7 @@ namespace Obuchanik
             Button btnNewTest = new Button();
             btnNewTest.Content = "Новый тест " + $"{count}";
             btnNewTest.Name = "Test" + $"{count}";
+            btnNewTest.Style = (Style)FindResource("TestButton");
             StPnTests.Children.Add(btnNewTest);
 
             //вариант как можно подключить для кнопки обработчик событий
@@ -44,10 +46,12 @@ namespace Obuchanik
             RowDefinition rowDefinition1 = new RowDefinition();
             RowDefinition rowDefinition2 = new RowDefinition();
             RowDefinition rowDefinition3 = new RowDefinition();
+            RowDefinition rowDefinition4 = new RowDefinition();
 
             mainGrid.RowDefinitions.Add(rowDefinition1);
             mainGrid.RowDefinitions.Add(rowDefinition2);
             mainGrid.RowDefinitions.Add(rowDefinition3);
+            mainGrid.RowDefinitions.Add(rowDefinition4);
 
             Label newTestLabel = new Label();
             newTestLabel.Content = "Новый тест " + $"{count}";
@@ -57,13 +61,30 @@ namespace Obuchanik
             Grid.SetRow(newTestLabel, 0);
             mainGrid.Children.Add(newTestLabel);
 
-            //this.Show();
+            Label nameNewTest = new Label();
+            nameNewTest.Content = "Введите название: ";
+            nameNewTest.FontSize = 22;
+            nameNewTest.Margin = new Thickness(50, 50, 50, 10);
 
-            //Label nameNewTest = new Label();
-            //BorderMain.Child = nameNewTest;
-            //newTestLabel.Content = "Введите название:";
-            //newTestLabel.FontSize = 20;
-            //newTestLabel.Margin = new Thickness(350, 500, 200, 10);
+            Grid.SetRow(nameNewTest, 1);
+            mainGrid.Children.Add(nameNewTest);
+
+            TextBox textBoxForName = new TextBox();
+            textBoxForName.Height = 40;
+            textBoxForName.Width = 500;
+            textBoxForName.FontSize = 22;
+            textBoxForName.Margin = new Thickness(50, 0, 100, 10);
+
+            Grid.SetRow(textBoxForName, 2);
+            mainGrid.Children.Add(textBoxForName);
+
+            Button nextStep = new Button();
+            nextStep.Style = (Style)FindResource("RoundButton");
+            //Image img = new Image();
+            //img.Source = new BitmapImage(new Uri(@"next.png"));
+            //nextStep.Content = img;
+            Grid.SetRow(nextStep, 3);
+            mainGrid.Children.Add(nextStep);
         }
 
         //самодельно написанный обработчик нажатия на кнопку созданную в стек панеле
