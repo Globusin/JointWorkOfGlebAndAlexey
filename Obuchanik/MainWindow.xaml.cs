@@ -27,6 +27,7 @@ namespace Obuchanik
         }
 
         int count = 0;
+        string NamesTest;
 
         private void Btn_clic_plus(object sender, RoutedEventArgs e)
         {
@@ -71,11 +72,15 @@ namespace Obuchanik
             Grid.SetRow(nameNewTest, 1);
             mainGrid.Children.Add(nameNewTest);
 
-            TextBox textBoxForName = new TextBox();
-            textBoxForName.Height = 40;
-            textBoxForName.Width = 500;
-            textBoxForName.FontSize = 22;
-            textBoxForName.Margin = new Thickness(50, 0, 100, 10);
+            TextBox textBoxForName = new TextBox()
+            {
+                Height = 40,
+                Width = 500,
+                FontSize = 22,
+                Margin = new Thickness(50, 0, 100, 10)
+            };
+
+            NamesTest = textBoxForName.Text;
 
             Grid.SetRow(textBoxForName, 2);
             mainGrid.Children.Add(textBoxForName);
@@ -93,7 +98,7 @@ namespace Obuchanik
         private void BtnTest_Clic(object sender, RoutedEventArgs e)
         {
             Button current = (Button)sender;
-            
+            MessageBox.Show($"{NamesTest}");
         }
     }
 }
