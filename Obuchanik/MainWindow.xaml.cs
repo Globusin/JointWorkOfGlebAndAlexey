@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -57,16 +58,16 @@ namespace Obuchanik
 
             Label newTestLabel = new Label();
             newTestLabel.Content = "Новый тест " + $"{count}";
-            newTestLabel.FontSize = 25;
+            newTestLabel.FontSize = 35;
             newTestLabel.Margin = new Thickness(300, 5, 200, 10);
 
             Grid.SetRow(newTestLabel, 0);
             mainGrid.Children.Add(newTestLabel);
 
             Label nameNewTest = new Label();
-            nameNewTest.Content = "Введите название: ";
-            nameNewTest.FontSize = 22;
-            nameNewTest.Margin = new Thickness(50, 50, 50, 10);
+            nameNewTest.Content = "Введите название:";
+            nameNewTest.FontSize = 30;
+            nameNewTest.Margin = new Thickness(80, 50, 50, 10);
 
             Grid.SetRow(nameNewTest, 1);
             mainGrid.Children.Add(nameNewTest);
@@ -82,9 +83,14 @@ namespace Obuchanik
 
             Button nextStep = new Button();
             nextStep.Style = (Style)FindResource("RoundButton");
-            //Image img = new Image();
-            //img.Source = new BitmapImage(new Uri(@"next.png"));
-            //nextStep.Content = img;
+            nextStep.Height = 100;
+            nextStep.Width = 100;
+            nextStep.Background = new SolidColorBrush(Color.FromRgb(244, 252, 196));
+            Image img = new Image();
+            img.Source = new BitmapImage(new Uri("next.png", UriKind.Relative));
+            nextStep.Content = img;
+            nextStep.Margin = new Thickness(160, 100, 100, 10);
+
             Grid.SetRow(nextStep, 3);
             mainGrid.Children.Add(nextStep);
         }
