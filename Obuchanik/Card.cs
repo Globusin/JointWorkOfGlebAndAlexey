@@ -15,9 +15,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+using System.Xml.Serialization;
 
 namespace Obuchanik
 {
+    [Serializable]
     public class Card
     {
         Image imageQuestion;
@@ -27,12 +29,12 @@ namespace Obuchanik
 
         public void AddAnswerImage(Image image)
         {
-            imageAnswer = image;
+            this.imageAnswer = image;
         }
 
         public void AddQuestionImage(Image image)
         {
-            imageAnswer = image;
+            this.imageQuestion = image;
         }
     }
 }

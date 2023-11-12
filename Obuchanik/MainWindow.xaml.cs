@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+using System.Xml.Serialization;
 
 namespace Obuchanik
 {
@@ -23,7 +24,7 @@ namespace Obuchanik
     /// </summary>
     ///
 
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IReadSave
     {
         public MainWindow()
         {
@@ -64,32 +65,7 @@ namespace Obuchanik
             //вариант как можно подключить для кнопки обработчик событий
             btnNewTest.Click += new RoutedEventHandler(BtnTest_Clic);
 
-            //RowDefinition rowDefinition1 = new RowDefinition();
-            //RowDefinition rowDefinition2 = new RowDefinition();
-            //RowDefinition rowDefinition3 = new RowDefinition();
-            //RowDefinition rowDefinition4 = new RowDefinition();
-            //RowDefinition rowDefinition5 = new RowDefinition();
-            //RowDefinition rowDefinition6 = new RowDefinition();
-            //RowDefinition rowDefinition7 = new RowDefinition();
-            //RowDefinition rowDefinition8 = new RowDefinition();
-            //RowDefinition rowDefinition9 = new RowDefinition();
-            //RowDefinition rowDefinition10 = new RowDefinition();
-            //RowDefinition rowDefinition11 = new RowDefinition();
-            //RowDefinition rowDefinition12 = new RowDefinition();
-
-            //mainGrid.RowDefinitions.Add(rowDefinition1);
-            //mainGrid.RowDefinitions.Add(rowDefinition2);
-            //mainGrid.RowDefinitions.Add(rowDefinition3);
-            //mainGrid.RowDefinitions.Add(rowDefinition4);
-            //mainGrid.RowDefinitions.Add(rowDefinition5);
-            //mainGrid.RowDefinitions.Add(rowDefinition6);
-            //mainGrid.RowDefinitions.Add(rowDefinition7);
-            //mainGrid.RowDefinitions.Add(rowDefinition8);
-            //mainGrid.RowDefinitions.Add(rowDefinition9);
-            //mainGrid.RowDefinitions.Add(rowDefinition10);
-            //mainGrid.RowDefinitions.Add(rowDefinition11);
-            //mainGrid.RowDefinitions.Add(rowDefinition12);
-
+            //создание строк в цикле
             for (int i = 0; i < 12; i++)
             {
                 RowDefinition rowDifinition = new RowDefinition();
@@ -183,6 +159,7 @@ namespace Obuchanik
                 Margin = new Thickness(280, 5, 80, 0),
                 HorizontalAlignment = HorizontalAlignment.Left,
             };
+
             Grid.SetRow(CardLabel, 1);
             mainGrid.Children.Add(CardLabel);
 
@@ -192,6 +169,7 @@ namespace Obuchanik
                 FontSize = 30,
                 Margin = new Thickness(50, 2, 10, 0)
             };
+
             Grid.SetRow(WriteQueLabel, 2);
             mainGrid.Children.Add(WriteQueLabel);
 
@@ -202,6 +180,7 @@ namespace Obuchanik
                 FontSize = 22,
                 Margin = new Thickness(50, 0, 100, 0)
             };
+
             Grid.SetRow(textBoxForQuestion, 3);
             mainGrid.Children.Add(textBoxForQuestion);
 
@@ -211,6 +190,7 @@ namespace Obuchanik
                 FontSize = 30,
                 Margin = new Thickness(50, 2, 10, 0)
             };
+
             Grid.SetRow(OrLabel, 4);
             mainGrid.Children.Add(OrLabel);
 
@@ -222,6 +202,7 @@ namespace Obuchanik
                 Content = "Вопрос картинка",
                 Margin = new Thickness(0, 5, 400, 0)
             };
+
             Grid.SetRow(chooseQuestionImageButton, 5);
             chooseQuestionImageButton.Click += new RoutedEventHandler(chooseImageButton_Click);
             mainGrid.Children.Add(chooseQuestionImageButton);
@@ -232,6 +213,7 @@ namespace Obuchanik
                 FontSize = 30,
                 Margin = new Thickness(50, 2, 10, 0)
             };
+
             Grid.SetRow(WriteAnsLabel, 6);
             mainGrid.Children.Add(WriteAnsLabel);
 
@@ -242,6 +224,7 @@ namespace Obuchanik
                 FontSize = 22,
                 Margin = new Thickness(50, 0, 100, 0)
             };
+
             Grid.SetRow(textBoxForAnswer, 7);
             mainGrid.Children.Add(textBoxForAnswer);
 
@@ -251,6 +234,7 @@ namespace Obuchanik
                 FontSize = 30,
                 Margin = new Thickness(50, 2, 10, 0)
             };
+
             Grid.SetRow(OrLabel2, 8);
             mainGrid.Children.Add(OrLabel2);
 
@@ -262,12 +246,14 @@ namespace Obuchanik
                 Content = "Ответ картинка",
                 Margin = new Thickness(0, 5, 400, 0)
             };
+
             Grid.SetRow(chooseAnswerImageButton, 9);
             chooseAnswerImageButton.Click += new RoutedEventHandler(chooseImageButton_Click);
             mainGrid.Children.Add(chooseAnswerImageButton);
 
             Image img = new Image();
             img.Source = new BitmapImage(new Uri("plus.png", UriKind.Relative));
+
             Button addCardButton = new Button()
             {
                 Style = (Style)FindResource("RoundButton"),
@@ -278,6 +264,7 @@ namespace Obuchanik
                 Margin = new Thickness(90, 5, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Left,
             };
+
             addCardButton.Click += new RoutedEventHandler(BtnNextStep_Clic);
             Grid.SetRow(addCardButton, 10);
             mainGrid.Children.Add(addCardButton);
@@ -294,7 +281,9 @@ namespace Obuchanik
                 Margin = new Thickness(0, 5, 95, 0),
                 HorizontalAlignment = HorizontalAlignment.Right,
             };
+
             endOfNewTestCreation.Click += new RoutedEventHandler(BtnNextStep_Clic);
+
             Grid.SetRow(endOfNewTestCreation, 10);
             mainGrid.Children.Add(endOfNewTestCreation);
 
@@ -305,6 +294,7 @@ namespace Obuchanik
                 Margin = new Thickness(70, 5, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Left,
             };
+
             Grid.SetRow(addNewCardForButtonLabel, 11);
             mainGrid.Children.Add(addNewCardForButtonLabel);
 
@@ -316,6 +306,7 @@ namespace Obuchanik
                 Margin = new Thickness(0, 5, 70, 0),
                 HorizontalAlignment = HorizontalAlignment.Right,
             };
+
             Grid.SetRow(endOfNewTestCreationForButtonLabel, 11);
             mainGrid.Children.Add(endOfNewTestCreationForButtonLabel);
         }
@@ -336,6 +327,22 @@ namespace Obuchanik
             {
                 // Обработка выбранного файла
             }
+        }
+
+
+        public List<Test> GetData(string path)
+        {
+            string[] arrayStrDirect = Directory.GetFiles(path);
+
+            List<Test> tests = new List<Test>();
+
+
+            return tests;
+        }
+
+        public void SaveData(string path, List<Test> listTest)
+        {
+            
         }
     }
 }

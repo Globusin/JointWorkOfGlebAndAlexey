@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Obuchanik
 {
+    [Serializable]
     public class Test
     {
         List<Card> cards = new List<Card>();
