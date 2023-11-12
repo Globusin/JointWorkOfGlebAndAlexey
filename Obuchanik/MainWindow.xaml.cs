@@ -55,31 +55,37 @@ namespace Obuchanik
             //вариант как можно подключить для кнопки обработчик событий
             btnNewTest.Click += new RoutedEventHandler(BtnTest_Clic);
 
-            RowDefinition rowDefinition1 = new RowDefinition();
-            RowDefinition rowDefinition2 = new RowDefinition();
-            RowDefinition rowDefinition3 = new RowDefinition();
-            RowDefinition rowDefinition4 = new RowDefinition();
-            RowDefinition rowDefinition5 = new RowDefinition();
-            RowDefinition rowDefinition6 = new RowDefinition();
-            RowDefinition rowDefinition7 = new RowDefinition();
-            RowDefinition rowDefinition8 = new RowDefinition();
-            RowDefinition rowDefinition9 = new RowDefinition();
-            RowDefinition rowDefinition10 = new RowDefinition();
-            RowDefinition rowDefinition11 = new RowDefinition();
-            RowDefinition rowDefinition12 = new RowDefinition();
+            //RowDefinition rowDefinition1 = new RowDefinition();
+            //RowDefinition rowDefinition2 = new RowDefinition();
+            //RowDefinition rowDefinition3 = new RowDefinition();
+            //RowDefinition rowDefinition4 = new RowDefinition();
+            //RowDefinition rowDefinition5 = new RowDefinition();
+            //RowDefinition rowDefinition6 = new RowDefinition();
+            //RowDefinition rowDefinition7 = new RowDefinition();
+            //RowDefinition rowDefinition8 = new RowDefinition();
+            //RowDefinition rowDefinition9 = new RowDefinition();
+            //RowDefinition rowDefinition10 = new RowDefinition();
+            //RowDefinition rowDefinition11 = new RowDefinition();
+            //RowDefinition rowDefinition12 = new RowDefinition();
 
-            mainGrid.RowDefinitions.Add(rowDefinition1);
-            mainGrid.RowDefinitions.Add(rowDefinition2);
-            mainGrid.RowDefinitions.Add(rowDefinition3);
-            mainGrid.RowDefinitions.Add(rowDefinition4);
-            mainGrid.RowDefinitions.Add(rowDefinition5);
-            mainGrid.RowDefinitions.Add(rowDefinition6);
-            mainGrid.RowDefinitions.Add(rowDefinition7);
-            mainGrid.RowDefinitions.Add(rowDefinition8);
-            mainGrid.RowDefinitions.Add(rowDefinition9);
-            mainGrid.RowDefinitions.Add(rowDefinition10);
-            mainGrid.RowDefinitions.Add(rowDefinition11);
-            mainGrid.RowDefinitions.Add(rowDefinition12);
+            //mainGrid.RowDefinitions.Add(rowDefinition1);
+            //mainGrid.RowDefinitions.Add(rowDefinition2);
+            //mainGrid.RowDefinitions.Add(rowDefinition3);
+            //mainGrid.RowDefinitions.Add(rowDefinition4);
+            //mainGrid.RowDefinitions.Add(rowDefinition5);
+            //mainGrid.RowDefinitions.Add(rowDefinition6);
+            //mainGrid.RowDefinitions.Add(rowDefinition7);
+            //mainGrid.RowDefinitions.Add(rowDefinition8);
+            //mainGrid.RowDefinitions.Add(rowDefinition9);
+            //mainGrid.RowDefinitions.Add(rowDefinition10);
+            //mainGrid.RowDefinitions.Add(rowDefinition11);
+            //mainGrid.RowDefinitions.Add(rowDefinition12);
+
+            for (int i = 0; i < 12; i++)
+            {
+                RowDefinition rowDifinition = new RowDefinition();
+                mainGrid.RowDefinitions.Add(rowDifinition);
+            }
 
             //характеристика Label с помощью {}
             NameTestLabel = new Label()
