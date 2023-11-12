@@ -8,9 +8,11 @@ namespace Obuchanik
 {
     public class Test
     {
-        public string question;
-        public string answer;
+        List<Card> cards = new List<Card>();
 
-        public Test() { }
+        public void AddCard(Card card)
+        {
+            cards.Add(card);
+        }
     }
 }
