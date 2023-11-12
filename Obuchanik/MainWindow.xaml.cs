@@ -21,6 +21,8 @@ namespace Obuchanik
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
+    ///
+
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -36,6 +38,11 @@ namespace Obuchanik
 
         Dictionary<string, Action<string>> callerDict = new Dictionary<string, Action<string>>();
 
+        public void addMethod(string name)
+        {
+            callerDict[name].Invoke(name);
+        }
+
         private void Btn_clic_plus(object sender, RoutedEventArgs e)
         {
             mainGrid.Children.Clear();
@@ -49,7 +56,9 @@ namespace Obuchanik
                 Name = "Test" + $"{count}",
                 Style = (Style)FindResource("TestButton")
             };
-            
+
+            callerDict.Add(btnNewTest.Name, addMethod);
+
             StPnTests.Children.Add(btnNewTest);
 
             //вариант как можно подключить для кнопки обработчик событий
@@ -134,6 +143,8 @@ namespace Obuchanik
         private void BtnTest_Clic(object sender, RoutedEventArgs e)
         {
             Button current = (Button)sender;
+
+            addMethod(current.Name);
         }
 
         int countOfCards = 0;
@@ -267,7 +278,7 @@ namespace Obuchanik
 
             img = new Image();
             img.Source = new BitmapImage(new Uri("next.png", UriKind.Relative));
-            Button endOfNewTestCreation= new Button()
+            Button endOfNewTestCreation = new Button()
             {
                 Style = (Style)FindResource("RoundButton"),
                 Height = 100,
@@ -301,6 +312,11 @@ namespace Obuchanik
             };
             Grid.SetRow(endOfNewTestCreationForButtonLabel, 11);
             mainGrid.Children.Add(endOfNewTestCreationForButtonLabel);
+        }
+
+        private void addCardButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void chooseImageButton_Click(object sender, RoutedEventArgs e)
