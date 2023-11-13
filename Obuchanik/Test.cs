@@ -9,6 +9,8 @@ namespace Obuchanik
     [Serializable]
     public class Test
     {
+        public string NameTest;
+
         List<Card> cards = new List<Card>();
 
         public void AddCard(Card card)
