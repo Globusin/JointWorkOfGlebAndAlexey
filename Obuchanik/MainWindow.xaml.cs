@@ -9,6 +9,12 @@ using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using System.Xml.Serialization;
 using System.Threading;
+using System.Windows.Media.Animation;
+using System.Reflection;
+using System.Windows.Shapes;
+using System.Collections;
+using static System.Net.Mime.MediaTypeNames;
+using Image = System.Windows.Controls.Image;
 
 namespace Obuchanik
 {
@@ -16,25 +22,47 @@ namespace Obuchanik
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
     ///
-
     public partial class MainWindow : Window, IReadSave
     {
         List<Test> listTest = new List<Test>();
-        string pathSerializeFile = "DataSerialize/DataSerialize.xml";
-
-        public MainWindow()
-        {
-            listTest = GetData(pathSerializeFile);
-            InitializeComponent();
-        }
-
         int count = 0;
+        int countOfCards;
         Button btnNewTest;
         Label NameTestLabel;
         TextBox textBoxForName;
         Button BtnNextStep;
+        Test test;
+        string imagePath;
+        string imageAnsPath;
+        string imageQuestPath;
 
         Dictionary<string, Action<string>> callerDict = new Dictionary<string, Action<string>>();
+
+        public MainWindow()
+        {
+            listTest = GetData("DataSerialize");
+            InitializeComponent();
+            foreach (var item in listTest)
+            {
+                AddTestOnStPn(item);
+            }
+        }
+
+        public void AddTestOnStPn(Test test)
+        {
+            count++;//считаем количество созданных тестов
+
+            btnNewTest = new Button()
+            {
+                Content = test.nameTest,
+                Name = "Test" + $"{count}",
+                Style = (Style)FindResource("TestButton")
+            };
+
+            callerDict.Add(btnNewTest.Name, OpenSelectTest);
+            btnNewTest.Click += new RoutedEventHandler(BtnTest_Clic);
+            StPnTests.Children.Add(btnNewTest);
+        }
 
         public void OpenSelectTest(string name)
         {
@@ -46,10 +74,9 @@ namespace Obuchanik
         private void Btn_clic_plus(object sender, RoutedEventArgs e)
         {
             mainGrid.Children.Clear();
+            countOfCards = 0;
 
-            count++;//считаем количество созданных тестов 
-
-            //создаем кнопки, для дальнейшего открытия созданного теста
+            count++;//считаем количество созданных тестов
             btnNewTest = new Button()
             {
                 Content = "Новый тест " + $"{count}",
@@ -57,18 +84,9 @@ namespace Obuchanik
                 Style = (Style)FindResource("TestButton")
             };
 
-            //создаем объект класса Test
-            Test newTest = new Test()
-            {
-                NameTest = textBoxForName.Text
-            };
-
             callerDict.Add(btnNewTest.Name, OpenSelectTest);
-
-            StPnTests.Children.Add(btnNewTest);
-
-            //вариант как можно подключить для кнопки обработчик событий
             btnNewTest.Click += new RoutedEventHandler(BtnTest_Clic);
+            StPnTests.Children.Add(btnNewTest);
 
             //создание строк в цикле
             for (int i = 0; i < 12; i++)
@@ -125,7 +143,8 @@ namespace Obuchanik
             Grid.SetRow(BtnNextStep, 3);
             mainGrid.Children.Add(BtnNextStep);
 
-            listTest.Add(newTest);
+            //создаем объект класса Test
+            test = new Test();
         }
 
         //обработчик нажатия на кнопку созданную в стек панеле
@@ -136,16 +155,24 @@ namespace Obuchanik
 
             callerDict[current.Name].Invoke(current.Name);
 
-            //OpenSelectTest(current.Name);
+            OpenSelectTest(current.Name);
         }
-
-        int countOfCards = 0;
 
         //обработчик на btnNextStep
         //создается при создании нового теста
+
+        // нужно сделать метод по созданию карточки
+        // его нужно сделать отдельно, иначе в неверном порядке идет создание карточки - текст боксы
+        // еще не заполнены, а мы уже создаем новую карточку - по отладке понятно о чем речь
+
         private void BtnNextStep_Clic(object sender, RoutedEventArgs e)
         {
+            test.nameTest = textBoxForName.Text;
+
             mainGrid.ShowGridLines = false;
+            imageAnsPath = null;
+            imageQuestPath = null;
+
             //переносим значение введенного названия теста в отображение в кнопке и поле
             btnNewTest.Content = textBoxForName.Text;
             NameTestLabel.Content = textBoxForName.Text;
@@ -216,6 +243,7 @@ namespace Obuchanik
 
             Grid.SetRow(chooseQuestionImageButton, 5);
             chooseQuestionImageButton.Click += new RoutedEventHandler(chooseImageButton_Click);
+            imageQuestPath = imagePath;
             mainGrid.Children.Add(chooseQuestionImageButton);
 
             Label WriteAnsLabel = new Label()
@@ -260,6 +288,7 @@ namespace Obuchanik
 
             Grid.SetRow(chooseAnswerImageButton, 9);
             chooseAnswerImageButton.Click += new RoutedEventHandler(chooseImageButton_Click);
+            imageAnsPath = imagePath;
             mainGrid.Children.Add(chooseAnswerImageButton);
 
             Image img = new Image();
@@ -277,7 +306,7 @@ namespace Obuchanik
                 Margin = new Thickness(90, 5, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Left,
             };
-            addCardButton.Click += new RoutedEventHandler(addCardButton_Click);
+            //addCardButton.Click += new RoutedEventHandler(addCardButton_Click);
 
             addCardButton.Click += new RoutedEventHandler(BtnNextStep_Clic);
             Grid.SetRow(addCardButton, 10);
@@ -285,7 +314,7 @@ namespace Obuchanik
 
             img = new Image();
             img.Source = new BitmapImage(new Uri("next.png", UriKind.Relative));
-            Button endOfNewTestCreation = new Button()
+            Button BtnEndOfNewTestCreation = new Button()
             {
                 Style = (Style)FindResource("RoundButton"),
                 Height = 100,
@@ -296,10 +325,10 @@ namespace Obuchanik
                 HorizontalAlignment = HorizontalAlignment.Right,
             };
 
-            endOfNewTestCreation.Click += new RoutedEventHandler(BtnNextStep_Clic);
+            BtnEndOfNewTestCreation.Click += new RoutedEventHandler(BtnEndOfNewTestCreation_Click);
 
-            Grid.SetRow(endOfNewTestCreation, 10);
-            mainGrid.Children.Add(endOfNewTestCreation);
+            Grid.SetRow(BtnEndOfNewTestCreation, 10);
+            mainGrid.Children.Add(BtnEndOfNewTestCreation);
 
             Label addNewCardForButtonLabel = new Label()
             {
@@ -324,14 +353,37 @@ namespace Obuchanik
             Grid.SetRow(endOfNewTestCreationForButtonLabel, 11);
             mainGrid.Children.Add(endOfNewTestCreationForButtonLabel);
 
-            //сохраняем все что уже сделано
-            SaveData(pathSerializeFile, listTest);
+
+            Card newCard = new Card(textBoxForQuestion.Text, textBoxForAnswer.Text);
+
+            if (imageQuestPath != null)
+            {
+                img = new Image();
+                img.Source = new BitmapImage(new Uri(imageQuestPath, UriKind.Relative));
+                newCard.AddQuestionImage(img);
+            }
+
+            if (imageAnsPath != null)
+            {
+                img = new Image();
+                img.Source = new BitmapImage(new Uri(imageAnsPath, UriKind.Relative));
+                newCard.AddAnswerImage(img);
+            }
+
+            test.AddCard(newCard);
         }
 
-        private void addCardButton_Click(object sender, RoutedEventArgs e)
+        private void BtnEndOfNewTestCreation_Click(object sender, RoutedEventArgs e)
         {
-            Card newCard = new Card();
+            listTest.Add(test);
+            SaveData("DataSerialize", listTest);
+            mainGrid.Children.Clear();
         }
+
+        //private void addCardButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    Card newCard = new Card();
+        //}
 
         private void chooseImageButton_Click(object sender, RoutedEventArgs e)
         {
@@ -342,7 +394,7 @@ namespace Obuchanik
 
             if (openFileDialog.ShowDialog() == true)
             {
-                // Обработка выбранного файла
+                imagePath = openFileDialog.FileName;
             }
         }
 

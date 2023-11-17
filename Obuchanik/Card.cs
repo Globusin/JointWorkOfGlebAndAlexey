@@ -24,8 +24,19 @@ namespace Obuchanik
     {
         Image imageQuestion;
         Image imageAnswer;
-        public string question;
-        public string answer;
+        public string question = "";
+        public string answer = "";
+
+        public Card()
+        {
+
+        }
+
+        public Card(string question, string answer)
+        {
+            this.question = question;
+            this.answer = answer;
+        }
 
         public void AddAnswerImage(Image image)
         {
