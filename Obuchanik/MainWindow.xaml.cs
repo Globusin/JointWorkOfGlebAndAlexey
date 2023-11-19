@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Collections;
 using static System.Net.Mime.MediaTypeNames;
 using Image = System.Windows.Controls.Image;
+using System.ComponentModel;
 
 namespace Obuchanik
 {
@@ -25,7 +26,7 @@ namespace Obuchanik
     public partial class MainWindow : Window, IReadSave
     {
         List<Test> listTest = new List<Test>();
-        int count = 0;
+        int countTests = 0;
         int countOfCards;
         Button btnNewTest;
         Label NameTestLabel;
@@ -50,12 +51,12 @@ namespace Obuchanik
 
         public void AddTestOnStPn(Test test)
         {
-            count++;//считаем количество созданных тестов
+            countTests++;//считаем количество созданных тестов
 
             btnNewTest = new Button()
             {
                 Content = test.nameTest,
-                Name = "Test" + $"{count}",
+                Name = "Test" + $"{countTests}",
                 Style = (Style)FindResource("TestButton")
             };
 
@@ -76,11 +77,11 @@ namespace Obuchanik
             mainGrid.Children.Clear();
             countOfCards = 0;
 
-            count++;//считаем количество созданных тестов
+            countTests++;//считаем количество созданных тестов
             btnNewTest = new Button()
             {
-                Content = "Новый тест " + $"{count}",
-                Name = "Test" + $"{count}",
+                Content = "Новый тест " + $"{countTests}",
+                Name = "Test" + $"{countTests}",
                 Style = (Style)FindResource("TestButton")
             };
 
@@ -98,7 +99,7 @@ namespace Obuchanik
             //характеристика Label с помощью {}
             NameTestLabel = new Label()
             {
-                Content = "Новый тест " + $"{count}",
+                Content = "Новый тест " + $"{countTests}",
                 FontSize = 35,
                 Margin = new Thickness(300, 5, 200, 10)
             };
@@ -115,16 +116,21 @@ namespace Obuchanik
             Grid.SetRow(nameNewTest, 1);
             mainGrid.Children.Add(nameNewTest);
 
-            //характеристика TextBox с помощью {}
-            textBoxForName = new TextBox()
+
+            textBoxForName = new TextBox();
+            textBoxForName.FontSize = 22;
+            Border border = new Border()
             {
+                CornerRadius = new CornerRadius(2),
+                BorderBrush = Brushes.Black,
+                BorderThickness = new Thickness(1.5),
+                Child = textBoxForName,
                 Height = 40,
                 Width = 500,
-                FontSize = 22,
                 Margin = new Thickness(50, 0, 100, 10)
             };
-            Grid.SetRow(textBoxForName, 2);
-            mainGrid.Children.Add(textBoxForName);
+            Grid.SetRow(border, 2);
+            mainGrid.Children.Add(border);
 
             Image img = new Image();
             img.Source = new BitmapImage(new Uri("next.png", UriKind.Relative));
@@ -216,7 +222,7 @@ namespace Obuchanik
                 Height = 40,
                 Width = 500,
                 FontSize = 22,
-                Margin = new Thickness(50, 0, 100, 0)
+                Margin = new Thickness(50, 0, 100, 0),
             };
 
             Grid.SetRow(textBoxForQuestion, 3);
@@ -353,6 +359,7 @@ namespace Obuchanik
             Grid.SetRow(endOfNewTestCreationForButtonLabel, 11);
             mainGrid.Children.Add(endOfNewTestCreationForButtonLabel);
 
+            // должны передать то что дальше в метод и сохранить новую карточку, после нажатия на кнопку addCardButton
 
             Card newCard = new Card(textBoxForQuestion.Text, textBoxForAnswer.Text);
 
@@ -380,10 +387,26 @@ namespace Obuchanik
             mainGrid.Children.Clear();
         }
 
-        //private void addCardButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    Card newCard = new Card();
-        //}
+        private void addCardButton_Click(object sender, RoutedEventArgs e)
+        {
+            //Card newCard = new Card(sender.Text, textBoxForAnswer.Text);
+
+            //if (imageQuestPath != null)
+            //{
+            //    img = new Image();
+            //    img.Source = new BitmapImage(new Uri(imageQuestPath, UriKind.Relative));
+            //    newCard.AddQuestionImage(img);
+            //}
+
+            //if (imageAnsPath != null)
+            //{
+            //    img = new Image();
+            //    img.Source = new BitmapImage(new Uri(imageAnsPath, UriKind.Relative));
+            //    newCard.AddAnswerImage(img);
+            //}
+
+            //test.AddCard(newCard);
+        }
 
         private void chooseImageButton_Click(object sender, RoutedEventArgs e)
         {
