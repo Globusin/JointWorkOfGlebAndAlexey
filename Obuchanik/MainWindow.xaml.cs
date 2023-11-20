@@ -31,9 +31,10 @@ namespace Obuchanik
         Button btnNewTest;
         Label NameTestLabel;
         TextBox textBoxForName;
+        TextBox textBoxForQuestion;
+        TextBox textBoxForAnswer;
         Button BtnNextStep;
         Test test;
-        string imagePath;
         string imageAnsPath;
         string imageQuestPath;
 
@@ -43,114 +44,11 @@ namespace Obuchanik
         {
             listTest = GetData("DataSerialize");
             InitializeComponent();
+            
             foreach (var item in listTest)
             {
                 AddTestOnStPn(item);
             }
-        }
-
-        public void AddTestOnStPn(Test test)
-        {
-            countTests++;//считаем количество созданных тестов
-
-            btnNewTest = new Button()
-            {
-                Content = test.nameTest,
-                Name = "Test" + $"{countTests}",
-                Style = (Style)FindResource("TestButton")
-            };
-
-            callerDict.Add(btnNewTest.Name, OpenSelectTest);
-            btnNewTest.Click += new RoutedEventHandler(BtnTest_Clic);
-            StPnTests.Children.Add(btnNewTest);
-        }
-
-        public void OpenSelectTest(string name)
-        {
-            //вывод тестов сохраненных в классе Test из List<Test>
-            //по ключу Name теста
-        }
-
-        //обработчик кнопки для добавления новых тестов
-        private void Btn_clic_plus(object sender, RoutedEventArgs e)
-        {
-            mainGrid.Children.Clear();
-            countOfCards = 0;
-
-            countTests++;//считаем количество созданных тестов
-            btnNewTest = new Button()
-            {
-                Content = "Новый тест " + $"{countTests}",
-                Name = "Test" + $"{countTests}",
-                Style = (Style)FindResource("TestButton")
-            };
-
-            callerDict.Add(btnNewTest.Name, OpenSelectTest);
-            btnNewTest.Click += new RoutedEventHandler(BtnTest_Clic);
-            StPnTests.Children.Add(btnNewTest);
-
-            //создание строк в цикле
-            for (int i = 0; i < 12; i++)
-            {
-                RowDefinition rowDifinition = new RowDefinition();
-                mainGrid.RowDefinitions.Add(rowDifinition);
-            }
-
-            //характеристика Label с помощью {}
-            NameTestLabel = new Label()
-            {
-                Content = "Новый тест " + $"{countTests}",
-                FontSize = 35,
-                Margin = new Thickness(300, 5, 200, 10)
-            };
-            Grid.SetRow(NameTestLabel, 0);
-            mainGrid.Children.Add(NameTestLabel);
-
-            //характеристика Label с помощью {}
-            Label nameNewTest = new Label()
-            {
-                Content = "Введите название: ",
-                FontSize = 30,
-                Margin = new Thickness(80, 50, 50, 10)
-            };
-            Grid.SetRow(nameNewTest, 1);
-            mainGrid.Children.Add(nameNewTest);
-
-
-            textBoxForName = new TextBox();
-            textBoxForName.FontSize = 22;
-            Border border = new Border()
-            {
-                CornerRadius = new CornerRadius(2),
-                BorderBrush = Brushes.Black,
-                BorderThickness = new Thickness(1.5),
-                Child = textBoxForName,
-                Height = 40,
-                Width = 500,
-                Margin = new Thickness(50, 0, 100, 10)
-            };
-            Grid.SetRow(border, 2);
-            mainGrid.Children.Add(border);
-
-            Image img = new Image();
-            img.Source = new BitmapImage(new Uri("next.png", UriKind.Relative));
-            //характеристика Button с помощью {}
-            BtnNextStep = new Button()
-            {
-                Style = (Style)FindResource("RoundButton"),
-                Height = 100,
-                Width = 100,
-                Background = new SolidColorBrush(Color.FromRgb(244, 252, 196)),
-                Content = img,
-                Margin = new Thickness(160, 100, 100, 10)
-            };
-            BtnNextStep.Click += new RoutedEventHandler(BtnNextStep_Clic);
-
-            Grid.SetRow(BtnNextStep, 3);
-            mainGrid.Children.Add(BtnNextStep);
-
-            //создаем объект класса Test
-            test = new Test();
         }
 
         //обработчик нажатия на кнопку созданную в стек панеле
@@ -164,26 +62,158 @@ namespace Obuchanik
             OpenSelectTest(current.Name);
         }
 
-        //обработчик на btnNextStep
-        //создается при создании нового теста
+        //обработчик кнопки для добавления новых тестов
+        private void Btn_clic_plus(object sender, RoutedEventArgs e)
+        {
+            mainGrid.Children.Clear();
+            countOfCards = 0;
 
-        // нужно сделать метод по созданию карточки
-        // его нужно сделать отдельно, иначе в неверном порядке идет создание карточки - текст боксы
-        // еще не заполнены, а мы уже создаем новую карточку - по отладке понятно о чем речь
+            countTests++;
+            btnNewTest = new Button()
+            {
+                Content = "Новый тест " + $"{countTests}",
+                Name = "Test" + $"{countTests}",
+                Style = (Style)FindResource("TestButton")
+            };
+            callerDict.Add(btnNewTest.Name, OpenSelectTest);
+            btnNewTest.Click += new RoutedEventHandler(BtnTest_Clic);
+            StPnTests.Children.Add(btnNewTest);
+
+            //создание строк в цикле
+            for (int i = 0; i < 12; i++)
+            {
+                RowDefinition rowDifinition = new RowDefinition();
+                mainGrid.RowDefinitions.Add(rowDifinition);
+            }
+
+            NameTestLabel = new Label()
+            {
+                Content = "Новый тест " + $"{countTests}",
+                FontSize = 35,
+                Margin = new Thickness(300, 5, 200, 10)
+            };
+            Grid.SetRow(NameTestLabel, 0);
+            mainGrid.Children.Add(NameTestLabel);
+
+            Label nameNewTest = new Label()
+            {
+                Content = "Введите название: ",
+                FontSize = 30,
+                Margin = new Thickness(80, 50, 50, 10)
+            };
+            Grid.SetRow(nameNewTest, 1);
+            mainGrid.Children.Add(nameNewTest);
+
+            textBoxForName = new TextBox()
+            {
+                FontSize = 22,
+                Height = 40,
+                Width = 500,
+                Margin = new Thickness(50, 0, 100, 10)
+            };
+            Grid.SetRow(textBoxForName, 2);
+            mainGrid.Children.Add(textBoxForName);
+
+            Image img = new Image();
+            img.Source = new BitmapImage(new Uri("next.png", UriKind.Relative));
+            BtnNextStep = new Button()
+            {
+                Style = (Style)FindResource("RoundButton"),
+                Height = 100,
+                Width = 100,
+                Background = new SolidColorBrush(Color.FromRgb(244, 252, 196)),
+                Content = img,
+                Margin = new Thickness(160, 100, 100, 10)
+            };
+            BtnNextStep.Click += new RoutedEventHandler(BtnNextStep_Clic);
+            Grid.SetRow(BtnNextStep, 3);
+            mainGrid.Children.Add(BtnNextStep);
+
+            test = new Test();
+        }
 
         private void BtnNextStep_Clic(object sender, RoutedEventArgs e)
         {
-            test.nameTest = textBoxForName.Text;
+            CreateNewCard();
+        }
 
+        private void BtnEndOfNewTestCreation_Click(object sender, RoutedEventArgs e)
+        {
+            addCard(); ////////////////////////////// Надо ли?
+            listTest.Add(test);
+            SaveData("DataSerialize", listTest);
+            mainGrid.Children.Clear();
+        }
+
+        private void addCardButton_Clic(object sender, RoutedEventArgs e)
+        {
+            addCard();
+            CreateNewCard();
+        }
+
+        private void chooseImageAnsButton_Click(object sender, RoutedEventArgs e)
+        {
+            imageAnsPath = LoadImage();
+        }
+
+        private void chooseImageQueButton_Click(object sender, RoutedEventArgs e)
+        {
+            imageQuestPath = LoadImage();
+        }
+
+        //////////////////////// Методы:
+
+        public void AddTestOnStPn(Test test)
+        {
+            countTests++;
+
+            btnNewTest = new Button()
+            {
+                Content = test.nameTest,
+                Name = test.nameTest,
+                Style = (Style)FindResource("TestButton")
+            };
+
+            callerDict.Add(btnNewTest.Name, OpenSelectTest);
+            btnNewTest.Click += new RoutedEventHandler(BtnTest_Clic);
+            StPnTests.Children.Add(btnNewTest);
+        }
+
+        public void OpenSelectTest(string name)
+        {
+            //вывод тестов сохраненных в классе Test из List<Test>
+            //по ключу Name теста
+
+            Test curTest = listTest.FindAll(x => x.nameTest == name)[0];
+
+            foreach (var item in curTest.cards)
+            {
+                mainGrid.Children.Clear();
+                ShowCard(item);
+            }
+        }
+
+        private void ShowCard(Card card)
+        {
+            Label questionLabel = new Label()
+            {
+                Content = card.question,
+                FontSize = 35,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                //Margin = new Thickness(300, 5, 80, 0)
+            };
+            Grid.SetRow(questionLabel, 0);
+            mainGrid.Children.Add(questionLabel);
+        }
+
+        private void CreateNewCard()
+        {
+            test.nameTest = textBoxForName.Text;
             mainGrid.ShowGridLines = false;
             imageAnsPath = null;
             imageQuestPath = null;
-
-            //переносим значение введенного названия теста в отображение в кнопке и поле
             btnNewTest.Content = textBoxForName.Text;
             NameTestLabel.Content = textBoxForName.Text;
-
-            //очищаем grid для выводов полей по заполнению вопросов и ответов
             mainGrid.Children.Clear();
 
             Label nameTest = new Label()
@@ -203,7 +233,6 @@ namespace Obuchanik
                 Margin = new Thickness(280, 5, 80, 0),
                 HorizontalAlignment = HorizontalAlignment.Left,
             };
-
             Grid.SetRow(CardLabel, 1);
             mainGrid.Children.Add(CardLabel);
 
@@ -213,18 +242,16 @@ namespace Obuchanik
                 FontSize = 30,
                 Margin = new Thickness(50, 2, 10, 0)
             };
-
             Grid.SetRow(WriteQueLabel, 2);
             mainGrid.Children.Add(WriteQueLabel);
 
-            TextBox textBoxForQuestion = new TextBox()
+            textBoxForQuestion = new TextBox()
             {
+                FontSize = 22,
                 Height = 40,
                 Width = 500,
-                FontSize = 22,
-                Margin = new Thickness(50, 0, 100, 0),
+                Margin = new Thickness(50, 0, 100, 10)
             };
-
             Grid.SetRow(textBoxForQuestion, 3);
             mainGrid.Children.Add(textBoxForQuestion);
 
@@ -234,7 +261,6 @@ namespace Obuchanik
                 FontSize = 30,
                 Margin = new Thickness(50, 2, 10, 0)
             };
-
             Grid.SetRow(OrLabel, 4);
             mainGrid.Children.Add(OrLabel);
 
@@ -242,14 +268,13 @@ namespace Obuchanik
             {
                 Height = 40,
                 Width = 120,
-                //Background = new SolidColorBrush(Color.FromRgb(244, 252, 196)),
+                Background = new SolidColorBrush(Color.FromRgb(223, 238, 132)),
                 Content = "Вопрос картинка",
-                Margin = new Thickness(0, 5, 400, 0)
+                Margin = new Thickness(0, 5, 400, 0),
+                Style = (Style)FindResource("TestButton")
             };
-
             Grid.SetRow(chooseQuestionImageButton, 5);
-            chooseQuestionImageButton.Click += new RoutedEventHandler(chooseImageButton_Click);
-            imageQuestPath = imagePath;
+            chooseQuestionImageButton.Click += new RoutedEventHandler(chooseImageQueButton_Click);
             mainGrid.Children.Add(chooseQuestionImageButton);
 
             Label WriteAnsLabel = new Label()
@@ -258,18 +283,16 @@ namespace Obuchanik
                 FontSize = 30,
                 Margin = new Thickness(50, 2, 10, 0)
             };
-
             Grid.SetRow(WriteAnsLabel, 6);
             mainGrid.Children.Add(WriteAnsLabel);
 
-            TextBox textBoxForAnswer = new TextBox()
+            textBoxForAnswer = new TextBox()
             {
+                FontSize = 22,
                 Height = 40,
                 Width = 500,
-                FontSize = 22,
-                Margin = new Thickness(50, 0, 100, 0)
+                Margin = new Thickness(50, 0, 100, 10)
             };
-
             Grid.SetRow(textBoxForAnswer, 7);
             mainGrid.Children.Add(textBoxForAnswer);
 
@@ -279,7 +302,6 @@ namespace Obuchanik
                 FontSize = 30,
                 Margin = new Thickness(50, 2, 10, 0)
             };
-
             Grid.SetRow(OrLabel2, 8);
             mainGrid.Children.Add(OrLabel2);
 
@@ -287,21 +309,17 @@ namespace Obuchanik
             {
                 Height = 40,
                 Width = 120,
-                //Background = new SolidColorBrush(Color.FromRgb(244, 252, 196)),
+                Background = new SolidColorBrush(Color.FromRgb(223, 238, 132)),
                 Content = "Ответ картинка",
-                Margin = new Thickness(0, 5, 400, 0)
+                Margin = new Thickness(0, 5, 400, 0),
+                Style = (Style)FindResource("TestButton"),
             };
-
             Grid.SetRow(chooseAnswerImageButton, 9);
-            chooseAnswerImageButton.Click += new RoutedEventHandler(chooseImageButton_Click);
-            imageAnsPath = imagePath;
+            chooseAnswerImageButton.Click += new RoutedEventHandler(chooseImageAnsButton_Click);
             mainGrid.Children.Add(chooseAnswerImageButton);
 
             Image img = new Image();
             img.Source = new BitmapImage(new Uri("plus.png", UriKind.Relative));
-
-            //кнопка по добавлению новой карточки к тесту
-            //с добавлением к ней обработчика событий
             Button addCardButton = new Button()
             {
                 Style = (Style)FindResource("RoundButton"),
@@ -311,10 +329,8 @@ namespace Obuchanik
                 Content = img,
                 Margin = new Thickness(90, 5, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Left,
-            };
-            //addCardButton.Click += new RoutedEventHandler(addCardButton_Click);
-
-            addCardButton.Click += new RoutedEventHandler(BtnNextStep_Clic);
+            };         
+            addCardButton.Click += new RoutedEventHandler(addCardButton_Clic);
             Grid.SetRow(addCardButton, 10);
             mainGrid.Children.Add(addCardButton);
 
@@ -330,9 +346,7 @@ namespace Obuchanik
                 Margin = new Thickness(0, 5, 95, 0),
                 HorizontalAlignment = HorizontalAlignment.Right,
             };
-
             BtnEndOfNewTestCreation.Click += new RoutedEventHandler(BtnEndOfNewTestCreation_Click);
-
             Grid.SetRow(BtnEndOfNewTestCreation, 10);
             mainGrid.Children.Add(BtnEndOfNewTestCreation);
 
@@ -343,7 +357,6 @@ namespace Obuchanik
                 Margin = new Thickness(70, 5, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Left,
             };
-
             Grid.SetRow(addNewCardForButtonLabel, 11);
             mainGrid.Children.Add(addNewCardForButtonLabel);
 
@@ -355,14 +368,15 @@ namespace Obuchanik
                 Margin = new Thickness(0, 5, 70, 0),
                 HorizontalAlignment = HorizontalAlignment.Right,
             };
-
             Grid.SetRow(endOfNewTestCreationForButtonLabel, 11);
             mainGrid.Children.Add(endOfNewTestCreationForButtonLabel);
+        }
 
-            // должны передать то что дальше в метод и сохранить новую карточку, после нажатия на кнопку addCardButton
-
+        private void addCard()
+        {
             Card newCard = new Card(textBoxForQuestion.Text, textBoxForAnswer.Text);
 
+            Image img;
             if (imageQuestPath != null)
             {
                 img = new Image();
@@ -380,35 +394,7 @@ namespace Obuchanik
             test.AddCard(newCard);
         }
 
-        private void BtnEndOfNewTestCreation_Click(object sender, RoutedEventArgs e)
-        {
-            listTest.Add(test);
-            SaveData("DataSerialize", listTest);
-            mainGrid.Children.Clear();
-        }
-
-        private void addCardButton_Click(object sender, RoutedEventArgs e)
-        {
-            //Card newCard = new Card(sender.Text, textBoxForAnswer.Text);
-
-            //if (imageQuestPath != null)
-            //{
-            //    img = new Image();
-            //    img.Source = new BitmapImage(new Uri(imageQuestPath, UriKind.Relative));
-            //    newCard.AddQuestionImage(img);
-            //}
-
-            //if (imageAnsPath != null)
-            //{
-            //    img = new Image();
-            //    img.Source = new BitmapImage(new Uri(imageAnsPath, UriKind.Relative));
-            //    newCard.AddAnswerImage(img);
-            //}
-
-            //test.AddCard(newCard);
-        }
-
-        private void chooseImageButton_Click(object sender, RoutedEventArgs e)
+        private string LoadImage()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
@@ -417,8 +403,10 @@ namespace Obuchanik
 
             if (openFileDialog.ShowDialog() == true)
             {
-                imagePath = openFileDialog.FileName;
+                return openFileDialog.FileName;
             }
+
+            return null;
         }
 
         public List<Test> GetData(string path)

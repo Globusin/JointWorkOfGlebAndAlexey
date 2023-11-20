@@ -9,12 +9,13 @@
     <Grid ShowGridLines="False">
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="160" />
+            <ColumnDefinition Width="143" />
+            <ColumnDefinition Width="17"/>
             <ColumnDefinition Width="10" />
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Border CornerRadius="10" Background="#F4FCC4" Margin="10" Grid.Column="0">
+        <Border CornerRadius="10" Background="#F4FCC4" Margin="10,10,10,10" Grid.Column="0" Grid.ColumnSpan="2">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition />
@@ -47,7 +48,7 @@
             </Grid>
         </Border>
 
-        <Border x:Name="BorderMain" CornerRadius="10" Background="#F4FCC4" Margin="10" Grid.Column="2">
+        <Border x:Name="BorderMain" CornerRadius="10" Background="#F4FCC4" Margin="10,10,10,10" Grid.Column="3">
             <Canvas>
                 <Grid x:Name="mainGrid">
                 </Grid>
