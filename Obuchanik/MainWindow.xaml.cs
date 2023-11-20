@@ -385,6 +385,7 @@ namespace Obuchanik
         //    Card newCard = new Card();
         //}
 
+        //обработчик для выбора изображения
         private void chooseImageButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
