@@ -66,6 +66,7 @@ namespace Obuchanik
         private void Btn_clic_plus(object sender, RoutedEventArgs e)
         {
             mainGrid.Children.Clear();
+            mainGrid.ShowGridLines = true;
             countOfCards = 0;
 
             countTests++;
@@ -90,7 +91,9 @@ namespace Obuchanik
             {
                 Content = "Новый тест " + $"{countTests}",
                 FontSize = 35,
-                Margin = new Thickness(300, 5, 200, 10)
+                //Margin = new Thickness(300, 5, 200, 10),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
             };
             Grid.SetRow(NameTestLabel, 0);
             mainGrid.Children.Add(NameTestLabel);
@@ -99,7 +102,9 @@ namespace Obuchanik
             {
                 Content = "Введите название: ",
                 FontSize = 30,
-                Margin = new Thickness(80, 50, 50, 10)
+                //Margin = new Thickness(80, 50, 50, 10)
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
             };
             Grid.SetRow(nameNewTest, 1);
             mainGrid.Children.Add(nameNewTest);
