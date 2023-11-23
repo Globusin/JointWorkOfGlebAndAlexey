@@ -60,6 +60,32 @@ namespace Obuchanik
             callerDict[current.Name].Invoke(current.Name);
 
             OpenSelectTest(current.Name);
+
+            Button btnOK = new Button()
+            {
+                Name = "BtnOK",
+                Margin = new Thickness(120, 300, 600, 360),
+                Content = "OK",
+                Background = new SolidColorBrush(Colors.LightGreen),
+                FontSize = 50,
+                 
+            };
+            btnOK.Click += new RoutedEventHandler(Btn_OK_Click);
+
+            mainGrid.Children.Add(btnOK);
+
+            Button btnNotOK = new Button()
+            {
+                Name = "BtnNotOK",
+                Margin = new Thickness(560, 300, 130, 375),
+                Content = "Bad",
+                Background = new SolidColorBrush(Colors.LightGreen),
+                FontSize = 50,
+
+            };
+            btnNotOK.Click += new RoutedEventHandler(Btn_NotOK_Click);
+
+            mainGrid.Children.Add(btnNotOK);
         }
 
         //обработчик кнопки для добавления новых тестов
@@ -145,6 +171,7 @@ namespace Obuchanik
             test = new Test();
         }
 
+        //обрабочик для кнопки стрелочки
         private void BtnNextStep_Clic(object sender, RoutedEventArgs e)
         {
             CreateNewCard();
@@ -172,6 +199,18 @@ namespace Obuchanik
         private void chooseImageQueButton_Click(object sender, RoutedEventArgs e)
         {
             imageQuestPath = LoadImage();
+        }
+
+        //обрабочтик кнопки ОК
+        private void Btn_OK_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Тест освоен");
+        }
+
+        //обработчик кнопки bad
+        private void Btn_NotOK_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Тест не освоен");
         }
 
         //////////////////////// Методы:
@@ -212,9 +251,11 @@ namespace Obuchanik
             {
                 Content = card.question,
                 FontSize = 35,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                //Margin = new Thickness(300, 5, 80, 0)
+                //HorizontalAlignment = HorizontalAlignment.Center,
+                //VerticalAlignment = VerticalAlignment.Center
+                Margin = new Thickness(225, 70, 10, 500)
             };
+
             Grid.SetRow(questionLabel, 0);
             mainGrid.Children.Add(questionLabel);
         }
@@ -438,12 +479,7 @@ namespace Obuchanik
             test.AddCard(newCard);
         }
 
-        //private void addCardButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    Card newCard = new Card();
-        //}
-
-        private void chooseImageButton_Click(object sender, RoutedEventArgs e)
+        private string chooseImageButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
@@ -455,6 +491,18 @@ namespace Obuchanik
                 return openFileDialog.FileName;
             }
 
+            return null;
+        }
+
+        private string LoadImage()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            // фильтр для выбора только картинки - файлы соответсвующих форматов
+            openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                return openFileDialog.FileName;
+            }
             return null;
         }
 
