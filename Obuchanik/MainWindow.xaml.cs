@@ -66,6 +66,8 @@ namespace Obuchanik
         private void Btn_clic_plus(object sender, RoutedEventArgs e)
         {
             mainGrid.Children.Clear();
+            mainGrid.VerticalAlignment = VerticalAlignment.Top;
+            mainGrid.RowDefinitions.Clear();
             mainGrid.ShowGridLines = true;
             countOfCards = 0;
 
@@ -81,7 +83,7 @@ namespace Obuchanik
             StPnTests.Children.Add(btnNewTest);
 
             //создание строк в цикле
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < 5; i++)
             {
                 RowDefinition rowDifinition = new RowDefinition();
                 mainGrid.RowDefinitions.Add(rowDifinition);
@@ -91,22 +93,24 @@ namespace Obuchanik
             {
                 Content = "Новый тест " + $"{countTests}",
                 FontSize = 35,
-                //Margin = new Thickness(300, 5, 200, 10),
+                Margin = new Thickness(5, 5, 5, 5),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
             };
             Grid.SetRow(NameTestLabel, 0);
             mainGrid.Children.Add(NameTestLabel);
 
+            mainGrid.RowDefinitions[1].Height = new GridLength(100);
+
             Label nameNewTest = new Label()
             {
                 Content = "Введите название: ",
                 FontSize = 30,
-                //Margin = new Thickness(80, 50, 50, 10)
-                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(20, 5, 5, 5),
+                HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Center,
             };
-            Grid.SetRow(nameNewTest, 1);
+            Grid.SetRow(nameNewTest, 2);
             mainGrid.Children.Add(nameNewTest);
 
             textBoxForName = new TextBox()
@@ -114,9 +118,11 @@ namespace Obuchanik
                 FontSize = 22,
                 Height = 40,
                 Width = 500,
-                Margin = new Thickness(50, 0, 100, 10)
+                Margin = new Thickness(20, 5, 5, 5),
+                HorizontalAlignment= HorizontalAlignment.Left,
+                VerticalAlignment= VerticalAlignment.Center,
             };
-            Grid.SetRow(textBoxForName, 2);
+            Grid.SetRow(textBoxForName, 3);
             mainGrid.Children.Add(textBoxForName);
 
             Image img = new Image();
@@ -128,10 +134,12 @@ namespace Obuchanik
                 Width = 100,
                 Background = new SolidColorBrush(Color.FromRgb(244, 252, 196)),
                 Content = img,
-                Margin = new Thickness(160, 100, 100, 10)
+                Margin = new Thickness(5, 5, 5, 5),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
             };
             BtnNextStep.Click += new RoutedEventHandler(BtnNextStep_Clic);
-            Grid.SetRow(BtnNextStep, 3);
+            Grid.SetRow(BtnNextStep, 4);
             mainGrid.Children.Add(BtnNextStep);
 
             test = new Test();
@@ -220,13 +228,20 @@ namespace Obuchanik
             btnNewTest.Content = textBoxForName.Text;
             NameTestLabel.Content = textBoxForName.Text;
             mainGrid.Children.Clear();
+            mainGrid.VerticalAlignment = VerticalAlignment.Top;
+            mainGrid.RowDefinitions.Clear();
+
+            for (int i = 0; i < 12; i++)
+            {
+                RowDefinition rowDifinition = new RowDefinition();
+                mainGrid.RowDefinitions.Add(rowDifinition);
+            }
 
             Label nameTest = new Label()
             {
                 Content = NameTestLabel.Content,
-                FontSize = 35,
+                FontSize = 30,
                 HorizontalAlignment = HorizontalAlignment.Center,
-                //Margin = new Thickness(300, 5, 80, 0)
             };
             Grid.SetRow(nameTest, 0);
             mainGrid.Children.Add(nameTest);
@@ -234,9 +249,9 @@ namespace Obuchanik
             Label CardLabel = new Label()
             {
                 Content = $"Карточка {++countOfCards}",
-                FontSize = 32,
-                Margin = new Thickness(280, 5, 80, 0),
+                FontSize = 27,
                 HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(50, 0, 0, 0),
             };
             Grid.SetRow(CardLabel, 1);
             mainGrid.Children.Add(CardLabel);
@@ -244,8 +259,9 @@ namespace Obuchanik
             Label WriteQueLabel = new Label()
             {
                 Content = "Вопрос:",
-                FontSize = 30,
-                Margin = new Thickness(50, 2, 10, 0)
+                FontSize = 25,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(50, 0, 0, 0),
             };
             Grid.SetRow(WriteQueLabel, 2);
             mainGrid.Children.Add(WriteQueLabel);
@@ -255,7 +271,8 @@ namespace Obuchanik
                 FontSize = 22,
                 Height = 40,
                 Width = 500,
-                Margin = new Thickness(50, 0, 100, 10)
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(50, 0, 0, 0),
             };
             Grid.SetRow(textBoxForQuestion, 3);
             mainGrid.Children.Add(textBoxForQuestion);
@@ -263,8 +280,9 @@ namespace Obuchanik
             Label OrLabel = new Label()
             {
                 Content = "Или выбирите картинку:",
-                FontSize = 30,
-                Margin = new Thickness(50, 2, 10, 0)
+                FontSize = 25,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(50, 0, 0, 0),
             };
             Grid.SetRow(OrLabel, 4);
             mainGrid.Children.Add(OrLabel);
@@ -275,7 +293,8 @@ namespace Obuchanik
                 Width = 120,
                 Background = new SolidColorBrush(Color.FromRgb(223, 238, 132)),
                 Content = "Вопрос картинка",
-                Margin = new Thickness(0, 5, 400, 0),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(50, 0, 0, 0),
                 Style = (Style)FindResource("TestButton")
             };
             Grid.SetRow(chooseQuestionImageButton, 5);
@@ -285,8 +304,9 @@ namespace Obuchanik
             Label WriteAnsLabel = new Label()
             {
                 Content = "Ответ:",
-                FontSize = 30,
-                Margin = new Thickness(50, 2, 10, 0)
+                FontSize = 25,
+                Margin = new Thickness(50, 0, 0, 0),
+                HorizontalAlignment = HorizontalAlignment.Left,
             };
             Grid.SetRow(WriteAnsLabel, 6);
             mainGrid.Children.Add(WriteAnsLabel);
@@ -296,7 +316,8 @@ namespace Obuchanik
                 FontSize = 22,
                 Height = 40,
                 Width = 500,
-                Margin = new Thickness(50, 0, 100, 10)
+                Margin = new Thickness(50, 0, 0, 0),
+                HorizontalAlignment = HorizontalAlignment.Left,
             };
             Grid.SetRow(textBoxForAnswer, 7);
             mainGrid.Children.Add(textBoxForAnswer);
@@ -304,8 +325,9 @@ namespace Obuchanik
             Label OrLabel2 = new Label()
             {
                 Content = "Или выбирите картинку:",
-                FontSize = 30,
-                Margin = new Thickness(50, 2, 10, 0)
+                FontSize = 25,
+                Margin = new Thickness(50, 0, 0, 0),
+                HorizontalAlignment = HorizontalAlignment.Left,
             };
             Grid.SetRow(OrLabel2, 8);
             mainGrid.Children.Add(OrLabel2);
@@ -316,12 +338,26 @@ namespace Obuchanik
                 Width = 120,
                 Background = new SolidColorBrush(Color.FromRgb(223, 238, 132)),
                 Content = "Ответ картинка",
-                Margin = new Thickness(0, 5, 400, 0),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(50, 0, 0, 0),
                 Style = (Style)FindResource("TestButton"),
             };
             Grid.SetRow(chooseAnswerImageButton, 9);
             chooseAnswerImageButton.Click += new RoutedEventHandler(chooseImageAnsButton_Click);
             mainGrid.Children.Add(chooseAnswerImageButton);
+
+            Grid subGrid1 = new Grid();
+            Grid subGrid2 = new Grid();
+            subGrid1.HorizontalAlignment = HorizontalAlignment.Stretch;
+            subGrid2.HorizontalAlignment = HorizontalAlignment.Stretch;
+
+            for (int i = 0; i < 2; i++)
+            {
+                ColumnDefinition colDifinition1 = new ColumnDefinition();
+                ColumnDefinition colDifinition2 = new ColumnDefinition();
+                subGrid1.ColumnDefinitions.Add(colDifinition1);
+                subGrid2.ColumnDefinitions.Add(colDifinition2);
+            }
 
             Image img = new Image();
             img.Source = new BitmapImage(new Uri("plus.png", UriKind.Relative));
@@ -332,12 +368,11 @@ namespace Obuchanik
                 Width = 100,
                 Background = new SolidColorBrush(Color.FromRgb(244, 252, 196)),
                 Content = img,
-                Margin = new Thickness(90, 5, 0, 0),
-                HorizontalAlignment = HorizontalAlignment.Left,
+                HorizontalAlignment = HorizontalAlignment.Center,
             };         
             addCardButton.Click += new RoutedEventHandler(addCardButton_Clic);
-            Grid.SetRow(addCardButton, 10);
-            mainGrid.Children.Add(addCardButton);
+            Grid.SetColumn(addCardButton, 0);
+            subGrid1.Children.Add(addCardButton);
 
             img = new Image();
             img.Source = new BitmapImage(new Uri("next.png", UriKind.Relative));
@@ -348,33 +383,37 @@ namespace Obuchanik
                 Width = 100,
                 Background = new SolidColorBrush(Color.FromRgb(244, 252, 196)),
                 Content = img,
-                Margin = new Thickness(0, 5, 95, 0),
-                HorizontalAlignment = HorizontalAlignment.Right,
+                HorizontalAlignment = HorizontalAlignment.Center,
             };
             BtnEndOfNewTestCreation.Click += new RoutedEventHandler(BtnEndOfNewTestCreation_Click);
-            Grid.SetRow(BtnEndOfNewTestCreation, 10);
-            mainGrid.Children.Add(BtnEndOfNewTestCreation);
+            Grid.SetColumn(BtnEndOfNewTestCreation, 1);
+            subGrid1.Children.Add(BtnEndOfNewTestCreation);
 
             Label addNewCardForButtonLabel = new Label()
             {
                 Content = "Добавить\n карточку",
-                FontSize = 30,
-                Margin = new Thickness(70, 5, 0, 0),
-                HorizontalAlignment = HorizontalAlignment.Left,
+                FontSize = 25,
+                HorizontalAlignment = HorizontalAlignment.Center,
             };
-            Grid.SetRow(addNewCardForButtonLabel, 11);
-            mainGrid.Children.Add(addNewCardForButtonLabel);
-
+            Grid.SetColumn(addNewCardForButtonLabel, 0);
+            subGrid2.Children.Add(addNewCardForButtonLabel);
 
             Label endOfNewTestCreationForButtonLabel = new Label()
             {
                 Content = "Завершить\n создание",
-                FontSize = 30,
-                Margin = new Thickness(0, 5, 70, 0),
-                HorizontalAlignment = HorizontalAlignment.Right,
+                FontSize = 22,
+                HorizontalAlignment = HorizontalAlignment.Center,
             };
-            Grid.SetRow(endOfNewTestCreationForButtonLabel, 11);
-            mainGrid.Children.Add(endOfNewTestCreationForButtonLabel);
+            Grid.SetColumn(endOfNewTestCreationForButtonLabel, 1);
+            subGrid2.Children.Add(endOfNewTestCreationForButtonLabel);
+
+            mainGrid.RowDefinitions[10].Height = new GridLength(110);
+            mainGrid.RowDefinitions[11].Height = new GridLength(90);
+            Grid.SetRow(subGrid1, 10);
+            mainGrid.Children.Add(subGrid1);
+
+            Grid.SetRow(subGrid2, 11);
+            mainGrid.Children.Add(subGrid2);
         }
 
         private void addCard()

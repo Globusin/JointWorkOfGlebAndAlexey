@@ -48,11 +48,9 @@
             </Grid>
         </Border>
 
-        <Border x:Name="BorderMain" CornerRadius="10" Background="#F4FCC4" Margin="10,10,10,10" Grid.Column="3">
-            <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <Grid x:Name="mainGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="AliceBlue">
-                </Grid>
-            </Canvas>
+        <Border x:Name="BorderMain" CornerRadius="10" Background="#F4FCC4" Margin="10,10,10,10" Grid.Column="3" Grid.ColumnSpan="2">
+            <Grid x:Name="mainGrid">
+            </Grid>
         </Border>
     </Grid>
 </Window>
