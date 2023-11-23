@@ -5,16 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Obuchanik"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1000" Background="#DFEE84" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
-    <Grid ShowGridLines="False">
-
+        Title="MainWindow" Height="800" Width="1000" Background="#DFEE84" WindowStartupLocation="CenterScreen">
+    <Grid ShowGridLines="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="160" />
+            <ColumnDefinition Width="143" />
+            <ColumnDefinition Width="17"/>
             <ColumnDefinition Width="10" />
-            <ColumnDefinition/>
+            <ColumnDefinition />
+            <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
 
-        <Border CornerRadius="10" Background="#F4FCC4" Margin="10" Grid.Column="0">
+        <Border CornerRadius="10" Background="#F4FCC4" Margin="10,10,10,10" Grid.Column="0" Grid.ColumnSpan="2">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition />
@@ -47,11 +48,9 @@
             </Grid>
         </Border>
 
-        <Border x:Name="BorderMain" CornerRadius="10" Background="#F4FCC4" Margin="10" Grid.Column="2">
-            <Canvas>
-                <Grid x:Name="mainGrid">
-                </Grid>
-            </Canvas>
+        <Border x:Name="BorderMain" CornerRadius="10" Background="#F4FCC4" Margin="10,10,10,10" Grid.Column="3" Grid.ColumnSpan="2">
+            <Grid x:Name="mainGrid">
+            </Grid>
         </Border>
     </Grid>
 </Window>
