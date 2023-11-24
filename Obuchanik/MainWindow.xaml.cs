@@ -60,32 +60,6 @@ namespace Obuchanik
             callerDict[current.Name].Invoke(current.Name);
 
             OpenSelectTest(current.Name);
-
-            Button btnOK = new Button()
-            {
-                Name = "BtnOK",
-                Margin = new Thickness(120, 300, 600, 360),
-                Content = "OK",
-                Background = new SolidColorBrush(Colors.LightGreen),
-                FontSize = 50,
-                 
-            };
-            btnOK.Click += new RoutedEventHandler(Btn_OK_Click);
-
-            mainGrid.Children.Add(btnOK);
-
-            Button btnNotOK = new Button()
-            {
-                Name = "BtnNotOK",
-                Margin = new Thickness(560, 300, 130, 375),
-                Content = "Bad",
-                Background = new SolidColorBrush(Colors.LightGreen),
-                FontSize = 50,
-
-            };
-            btnNotOK.Click += new RoutedEventHandler(Btn_NotOK_Click);
-
-            mainGrid.Children.Add(btnNotOK);
         }
 
         //обработчик кнопки для добавления новых тестов
@@ -247,17 +221,98 @@ namespace Obuchanik
 
         private void ShowCard(Card card)
         {
-            Label questionLabel = new Label()
+            mainGrid.Children.Clear();
+            mainGrid.VerticalAlignment = VerticalAlignment.Top;
+            mainGrid.RowDefinitions.Clear();
+
+            for (int i = 0; i < 5; i++)
             {
-                Content = card.question,
-                FontSize = 35,
-                //HorizontalAlignment = HorizontalAlignment.Center,
-                //VerticalAlignment = VerticalAlignment.Center
-                Margin = new Thickness(225, 70, 10, 500)
+                RowDefinition rowDifinition = new RowDefinition();
+                mainGrid.RowDefinitions.Add(rowDifinition);
+            }
+
+            Grid gridForQuestion = new Grid();
+            for (int i = 0; i < 2; i++)
+            {
+                RowDefinition rowDifinition = new RowDefinition();
+                gridForQuestion.RowDefinitions.Add(rowDifinition);
+            }
+            Canvas canvasCard = new Canvas()
+            {
+                Background = new SolidColorBrush(Colors.White),
+                Margin = new Thickness(10, 10, 10, 10),
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+            };
+            canvasCard.Children.Add(gridForQuestion);
+
+            if (card.imageQuestion != null)
+            {
+                Grid.SetRow(card.imageQuestion, 0);
+                gridForQuestion.Children.Add(card.imageQuestion);
+            }
+            if (card.question != null)
+            {
+                Label label = new Label();
+                label.Content = card.question;
+
+                Grid.SetRow(label, 1);
+                gridForQuestion.Children.Add(label);
+            }
+            Grid.SetRow(canvasCard, 0);
+            mainGrid.Children.Add(canvasCard);
+
+            Grid gridForInformationAboutCard = new Grid();
+            gridForInformationAboutCard.HorizontalAlignment = HorizontalAlignment.Stretch;
+            for (int i = 0; i < 3; i++)
+            {
+                ColumnDefinition colDifinition = new ColumnDefinition();
+                gridForInformationAboutCard.ColumnDefinitions.Add(colDifinition);
+            }
+
+            Label labelNumCard = new Label();
+            int curCardNumber = test.cards.IndexOf(card);
+            labelNumCard.Content = $"Карточка {curCardNumber}/{test.cards.Count}";
+            Grid.SetColumn(labelNumCard, 0);
+            gridForInformationAboutCard.Children.Add(labelNumCard);
+
+            Button showAnswerBtn = new Button()
+            {
+                Style = (Style)FindResource("RoundButton"),
+                Content = "Показать ответ",
+                Background = new SolidColorBrush(Color.FromRgb(223, 238, 132)),
+                Height = 40,
+                Width = 120,
             };
 
-            Grid.SetRow(questionLabel, 0);
-            mainGrid.Children.Add(questionLabel);
+            Grid.SetColumn(showAnswerBtn, 1);
+            gridForInformationAboutCard.Children.Add(showAnswerBtn);
+
+            Button btnOK = new Button()
+            {
+                Name = "BtnOK",
+                Margin = new Thickness(120, 300, 600, 360),
+                Style = (Style)FindResource("RoundButton"),
+                Content = "OK",
+                Background = new SolidColorBrush(Colors.LightGreen),
+                FontSize = 50,
+            };
+            btnOK.Click += new RoutedEventHandler(Btn_OK_Click);
+            Grid.SetRow(btnOK, 2);
+            mainGrid.Children.Add(btnOK);
+
+            Button btnNotOK = new Button()
+            {
+                Name = "BtnNotOK",
+                Margin = new Thickness(560, 300, 130, 375),
+                Style = (Style)FindResource("RoundButton"),
+                Content = "Bad",
+                Background = new SolidColorBrush(Colors.LightGreen),
+                FontSize = 50,
+
+            };
+            btnNotOK.Click += new RoutedEventHandler(Btn_NotOK_Click);
+            Grid.SetRow(btnNotOK, 2);
+            mainGrid.Children.Add(btnNotOK);
         }
 
         private void CreateNewCard()
@@ -450,6 +505,8 @@ namespace Obuchanik
 
             mainGrid.RowDefinitions[10].Height = new GridLength(110);
             mainGrid.RowDefinitions[11].Height = new GridLength(90);
+            
+            
             Grid.SetRow(subGrid1, 10);
             mainGrid.Children.Add(subGrid1);
 

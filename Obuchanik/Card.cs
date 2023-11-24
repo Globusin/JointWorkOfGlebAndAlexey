@@ -8,8 +8,8 @@ namespace Obuchanik
     [Serializable]
     public class Card
     {
-        Image imageQuestion;
-        Image imageAnswer;
+        public Image imageQuestion;
+        public Image imageAnswer;
         public string question = "";
         public string answer = "";
 
