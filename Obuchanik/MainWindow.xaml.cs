@@ -287,6 +287,9 @@ namespace Obuchanik
             Grid.SetColumn(showAnswerBtn, 1);
             gridForInformationAboutCard.Children.Add(showAnswerBtn);
 
+            #region BtnOK
+            Image imgOK = new Image();
+            imgOK.Source = new BitmapImage(new Uri("galochka.png", UriKind.Relative));
             Button btnOK = new Button()
             {
                 Name = "BtnOK",
@@ -299,13 +302,17 @@ namespace Obuchanik
             btnOK.Click += new RoutedEventHandler(Btn_OK_Click);
             Grid.SetRow(btnOK, 2);
             mainGrid.Children.Add(btnOK);
+            #endregion
 
+            #region BtnNotOk
+            Image imgNotOK = new Image();
+            imgNotOK.Source = new BitmapImage(new Uri("Krestik.png", UriKind.Relative));
             Button btnNotOK = new Button()
             {
                 Name = "BtnNotOK",
                 Margin = new Thickness(560, 300, 130, 375),
                 Style = (Style)FindResource("RoundButton"),
-                Content = "Bad",
+                Content = imgNotOK,
                 Background = new SolidColorBrush(Colors.LightGreen),
                 FontSize = 50,
 
@@ -313,6 +320,7 @@ namespace Obuchanik
             btnNotOK.Click += new RoutedEventHandler(Btn_NotOK_Click);
             Grid.SetRow(btnNotOK, 2);
             mainGrid.Children.Add(btnNotOK);
+            #endregion
         }
 
         private void CreateNewCard()
