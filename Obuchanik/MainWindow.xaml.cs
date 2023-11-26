@@ -194,7 +194,16 @@ namespace Obuchanik
         {
             MessageBox.Show("Тест не освоен");
         }
-
+        //обработчик вывода правильного ответа карточки
+        private void Btn_ShowAnswer_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Ответ");
+        }
+        //обработчик кнопки dont Know
+        private void Btn_DontKnow_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Не все изучено");
+        }
         //////////////////////// Методы:
 
         public void AddTestOnStPn(Test test)
@@ -303,46 +312,108 @@ namespace Obuchanik
                 Height = 40,
                 Width = 120,
             };
+            showAnswerBtn.Click += new RoutedEventHandler(Btn_ShowAnswer_Click);
             Grid.SetColumn(showAnswerBtn, 1);
             gridForInformationAboutCard.Children.Add(showAnswerBtn);
 
             Grid.SetRow(gridForInformationAboutCard, 1);
             mainGrid.Children.Add(gridForInformationAboutCard);
 
-            #region BtnOK
+            Grid gridForBtnOkNotOkDontKnow = new Grid();
+            gridForBtnOkNotOkDontKnow.HorizontalAlignment = HorizontalAlignment.Stretch;
+
+            for (int i = 0; i < 3; i++)
+            {
+                ColumnDefinition colDifinition = new ColumnDefinition();
+                gridForBtnOkNotOkDontKnow.ColumnDefinitions.Add(colDifinition);
+            }
+
+            Grid.SetRow(gridForBtnOkNotOkDontKnow, 2);
+
+            Border borderForBtnOk = new Border()
+            {
+                CornerRadius = new CornerRadius(100),
+                Padding = new Thickness(30)
+            };
+
+            Grid.SetColumn(borderForBtnOk, 0);
+
             Image imgOK = new Image();
             imgOK.Source = new BitmapImage(new Uri("galochka.png", UriKind.Relative));
             Button btnOK = new Button()
             {
                 Name = "BtnOK",
-                Margin = new Thickness(120, 300, 600, 360),
+                //Margin = new Thickness(120, 300, 600, 360),
                 Style = (Style)FindResource("RoundButton"),
-                Content = "OK",
+                Content = imgOK,
                 Background = new SolidColorBrush(Colors.LightGreen),
-                FontSize = 50,
+                FontSize = 10,
+                Width = 90,
+                Height = 90
             };
             btnOK.Click += new RoutedEventHandler(Btn_OK_Click);
-            Grid.SetRow(btnOK, 2);
-            mainGrid.Children.Add(btnOK);
-            #endregion
+            borderForBtnOk.Child = btnOK;
+            gridForBtnOkNotOkDontKnow.Children.Add(borderForBtnOk);
 
-            #region BtnNotOk
+            //Grid.SetColumn(btnOK, 0);
+            //gridForBtnOkNotOkDontKnow.Children.Add(btnOK);
+
             Image imgNotOK = new Image();
             imgNotOK.Source = new BitmapImage(new Uri("Krestik.png", UriKind.Relative));
             Button btnNotOK = new Button()
             {
                 Name = "BtnNotOK",
-                Margin = new Thickness(560, 300, 130, 375),
+                //Margin = new Thickness(560, 300, 130, 375),
                 Style = (Style)FindResource("RoundButton"),
                 Content = imgNotOK,
-                Background = new SolidColorBrush(Colors.LightGreen),
+                Background = new SolidColorBrush(Colors.LightCoral),
                 FontSize = 50,
-
+                Width = 90,
+                Height = 90
             };
             btnNotOK.Click += new RoutedEventHandler(Btn_NotOK_Click);
-            Grid.SetRow(btnNotOK, 2);
-            mainGrid.Children.Add(btnNotOK);
-            #endregion
+
+            Border borderForBtnNotOk = new Border()
+            {
+                CornerRadius = new CornerRadius(100),
+                Padding = new Thickness(30)
+            };
+
+            Grid.SetColumn(borderForBtnNotOk, 2);
+            borderForBtnNotOk.Child = btnNotOK;
+            gridForBtnOkNotOkDontKnow.Children.Add(borderForBtnNotOk);
+
+            //Grid.SetColumn(btnNotOK, 2);
+            //gridForBtnOkNotOkDontKnow.Children.Add(btnNotOK);
+
+            Image imgDontKnow = new Image();
+            imgDontKnow.Source = new BitmapImage(new Uri("VoprosZnak.png", UriKind.Relative));
+            Button btnDontKnow = new Button()
+            {
+                Name = "btnDontKnow",
+                Style = (Style)FindResource("RoundButton"),
+                Content = imgDontKnow,
+                Background = new SolidColorBrush(Colors.LightYellow),
+                FontSize = 50,
+                Width = 90,
+                Height = 90
+            };
+            btnDontKnow.Click += new RoutedEventHandler(Btn_DontKnow_Click);
+
+            Border borderForBtnDontKnow = new Border()
+            {
+                CornerRadius = new CornerRadius(100),
+                Padding = new Thickness(30)
+            };
+
+            Grid.SetColumn(borderForBtnDontKnow, 1);
+            borderForBtnDontKnow.Child = btnDontKnow;
+            gridForBtnOkNotOkDontKnow.Children.Add(borderForBtnDontKnow);
+
+            //Grid.SetColumn(btnDontKnow, 1);
+            //gridForBtnOkNotOkDontKnow.Children.Add(btnDontKnow);
+
+            mainGrid.Children.Add(gridForBtnOkNotOkDontKnow);
         }
 
         private void CreateNewCard()
