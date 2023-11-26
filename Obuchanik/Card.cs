@@ -8,8 +8,8 @@ namespace Obuchanik
     [Serializable]
     public class Card
     {
-        public Image imageQuestion;
-        public Image imageAnswer;
+        public string imageQuestionPath;
+        public string imageAnswerPath;
         public string question = "";
         public string answer = "";
 
@@ -21,14 +21,14 @@ namespace Obuchanik
             this.answer = answer;
         }
 
-        public void AddAnswerImage(Image image)
+        public void AddAnswerImage(string path)
         {
-            this.imageAnswer = image;
+            imageAnswerPath = path;
         }
 
-        public void AddQuestionImage(Image image)
+        public void AddQuestionImage(string path)
         {
-            this.imageQuestion = image;
+            imageQuestionPath = path;
         }
     }
 }

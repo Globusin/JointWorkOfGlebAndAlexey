@@ -157,6 +157,14 @@ namespace Obuchanik
             listTest.Add(test);
             SaveData("DataSerialize", listTest);
             mainGrid.Children.Clear();
+
+            //if (StPnTests.Children.Count > 0)
+            //    StPnTests.Children.RemoveAt(StPnTests.Children.Count - 1);
+
+            //foreach (var item in listTest)
+            //{
+            //    AddTestOnStPn(item);
+            //}
         }
 
         private void addCardButton_Clic(object sender, RoutedEventArgs e)
@@ -210,13 +218,10 @@ namespace Obuchanik
             //вывод тестов сохраненных в классе Test из List<Test>
             //по ключу Name теста
 
-            Test curTest = listTest.FindAll(x => x.nameTest == name)[0];
+            test = listTest.FindAll(x => x.nameTest == name)[0];
 
-            foreach (var item in curTest.cards)
-            {
-                mainGrid.Children.Clear();
-                ShowCard(item);
-            }
+            mainGrid.Children.Clear();
+            ShowCard(test.cards[0]);
         }
 
         private void ShowCard(Card card)
@@ -224,7 +229,7 @@ namespace Obuchanik
             mainGrid.Children.Clear();
             mainGrid.VerticalAlignment = VerticalAlignment.Top;
             mainGrid.RowDefinitions.Clear();
-
+            mainGrid.ShowGridLines = true;
             for (int i = 0; i < 5; i++)
             {
                 RowDefinition rowDifinition = new RowDefinition();
@@ -237,29 +242,44 @@ namespace Obuchanik
                 RowDefinition rowDifinition = new RowDefinition();
                 gridForQuestion.RowDefinitions.Add(rowDifinition);
             }
-            Canvas canvasCard = new Canvas()
-            {
-                Background = new SolidColorBrush(Colors.White),
-                Margin = new Thickness(10, 10, 10, 10),
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-            };
-            canvasCard.Children.Add(gridForQuestion);
 
-            if (card.imageQuestion != null)
+            if (card.imageQuestionPath != null)
             {
-                Grid.SetRow(card.imageQuestion, 0);
-                gridForQuestion.Children.Add(card.imageQuestion);
+                Image img = new Image();
+                img.Source = new BitmapImage(new Uri(card.imageQuestionPath, UriKind.Relative));
+
+                Grid.SetRow(img, 0);
+                gridForQuestion.Children.Add(img);
             }
+
             if (card.question != null)
             {
-                Label label = new Label();
-                label.Content = card.question;
-
+                Label label = new Label()
+                {
+                    Content = card.question,
+                    FontSize = 30,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                };
                 Grid.SetRow(label, 1);
                 gridForQuestion.Children.Add(label);
             }
-            Grid.SetRow(canvasCard, 0);
-            mainGrid.Children.Add(canvasCard);
+
+            Border borderForQuestion = new Border()
+            {
+                CornerRadius = new CornerRadius(20),
+                Padding = new Thickness(10),
+                Background = new SolidColorBrush(Colors.White),
+                Child = gridForQuestion,
+            };
+            Border bigBorderForQuestion = new Border()
+            {
+                Child = borderForQuestion,
+                Padding = new Thickness(10),
+            };
+            Grid.SetRow(bigBorderForQuestion, 0);
+            mainGrid.Children.Add(bigBorderForQuestion);
+            mainGrid.Children[0].SetValue(Grid.ColumnProperty, 0);
+            mainGrid.Children[0].SetValue(Grid.RowProperty, 0);
 
             Grid gridForInformationAboutCard = new Grid();
             gridForInformationAboutCard.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -283,9 +303,11 @@ namespace Obuchanik
                 Height = 40,
                 Width = 120,
             };
-
             Grid.SetColumn(showAnswerBtn, 1);
             gridForInformationAboutCard.Children.Add(showAnswerBtn);
+
+            Grid.SetRow(gridForInformationAboutCard, 1);
+            mainGrid.Children.Add(gridForInformationAboutCard);
 
             #region BtnOK
             Image imgOK = new Image();
@@ -526,20 +548,11 @@ namespace Obuchanik
         {
             Card newCard = new Card(textBoxForQuestion.Text, textBoxForAnswer.Text);
 
-            Image img;
             if (imageQuestPath != null)
-            {
-                img = new Image();
-                img.Source = new BitmapImage(new Uri(imageQuestPath, UriKind.Relative));
-                newCard.AddQuestionImage(img);
-            }
+                newCard.AddQuestionImage(imageQuestPath);
 
             if (imageAnsPath != null)
-            {
-                img = new Image();
-                img.Source = new BitmapImage(new Uri(imageAnsPath, UriKind.Relative));
-                newCard.AddAnswerImage(img);
-            }
+                newCard.AddAnswerImage(imageAnsPath);
 
             test.AddCard(newCard);
         }
