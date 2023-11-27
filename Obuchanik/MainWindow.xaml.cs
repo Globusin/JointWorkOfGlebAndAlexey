@@ -1,22 +1,13 @@
-﻿using System;
-using System.IO;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
-using System.Data;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Microsoft.Win32;
 using System.Xml.Serialization;
-using System.Threading;
-using System.Windows.Media.Animation;
-using System.Reflection;
-using System.Windows.Shapes;
-using System.Collections;
-using static System.Net.Mime.MediaTypeNames;
 using Image = System.Windows.Controls.Image;
-using System.ComponentModel;
-using System.Security.Cryptography;
 
 namespace Obuchanik
 {
@@ -36,8 +27,11 @@ namespace Obuchanik
         TextBox textBoxForAnswer;
         Button BtnNextStep;
         Test test;
+        Card curCard;
         string imageAnsPath;
         string imageQuestPath;
+        Border borderForQuestion;
+        Border borderForAnswer;
 
         Dictionary<string, Action<string>> callerDict = new Dictionary<string, Action<string>>();
 
@@ -56,6 +50,11 @@ namespace Obuchanik
         //для открытия теста
         private void BtnTest_Clic(object sender, RoutedEventArgs e)
         {
+            foreach (var item in StPnTests.Children)
+            {
+                Button button = (Button)item;
+                button.Background = new SolidColorBrush(Color.FromRgb(223, 238, 132));
+            }
             Button current = (Button)sender;
             current.Name = current.Content.ToString();
             current.Background = new SolidColorBrush(Color.FromRgb(114, 201, 238));
@@ -147,7 +146,7 @@ namespace Obuchanik
         //обрабочик для кнопки стрелочки
         private void BtnNextStep_Clic(object sender, RoutedEventArgs e)
         {
-            btnNewTest.Name = textBoxForName.Text;
+            btnNewTest.Name = textBoxForName.Text.ToString();
             btnNewTest.Content = btnNewTest.Name;
             callerDict.Add(btnNewTest.Name, OpenSelectTest);
             btnNewTest.Click += new RoutedEventHandler(BtnTest_Clic);
@@ -180,27 +179,48 @@ namespace Obuchanik
             imageQuestPath = LoadImage();
         }
 
-        //обрабочтик кнопки ОК
+        //обрабочтик кнопки Знаю
         private void Btn_OK_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Тест освоен");
+            curCard.statusCard = Status.Passed;
+            ShowCard(curCard);
         }
 
-        //обработчик кнопки bad
-        private void Btn_NotOK_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Тест не освоен");
-        }
-        //обработчик вывода правильного ответа карточки
-        private void Btn_ShowAnswer_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Ответ");
-        }
-        //обработчик кнопки dont Know
+        //обработчик кнопки Следует повторить
         private void Btn_DontKnow_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Не все изучено");
+            curCard.statusCard = Status.Incomplete;
+            ShowCard(curCard);
         }
+
+        //обработчик кнопки Не знаю
+        private void Btn_NotOK_Click(object sender, RoutedEventArgs e)
+        {
+            curCard.statusCard = Status.Failed;
+            ShowCard(curCard);
+        }
+
+        //обработчик вывода правильного ответа карточки
+        private void Btn_coup_Click(object sender, RoutedEventArgs e)
+        {
+            if (borderForAnswer.Visibility == Visibility.Visible)
+            {
+                borderForAnswer.Visibility = Visibility.Hidden;
+                borderForQuestion.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                borderForAnswer.Visibility = Visibility.Visible;
+                borderForQuestion.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void BtnNextCard_Click(object sender, RoutedEventArgs e)
+        {
+            int index = test.cards.IndexOf(curCard);
+            ShowCard(test.cards[(index + 1) % test.cards.Count]);
+        }
+
         //////////////////////// Методы:
 
         public void AddTestOnStPn(Test test)
@@ -229,26 +249,13 @@ namespace Obuchanik
             ShowCard(test.cards[0]);
         }
 
-        private void ShowCard(Card card)
+        private Border GetCardQuestion(Card card)
         {
-            mainGrid.Children.Clear();
-            mainGrid.VerticalAlignment = VerticalAlignment.Top;
-            mainGrid.RowDefinitions.Clear();
-            mainGrid.ShowGridLines = false;
-            for (int i = 0; i < 5; i++)
-            {
-                RowDefinition rowDifinition = new RowDefinition();
-                mainGrid.RowDefinitions.Add(rowDifinition);
-            }
-            mainGrid.RowDefinitions[2].Height = new GridLength(150);
-            mainGrid.RowDefinitions[1].Height = new GridLength(100);
-            mainGrid.RowDefinitions[0].Height = new GridLength(500);
-
-            Grid gridForQuestion = new Grid();
+            Grid grid = new Grid();
             for (int i = 0; i < 2; i++)
             {
                 RowDefinition rowDifinition = new RowDefinition();
-                gridForQuestion.RowDefinitions.Add(rowDifinition);
+                grid.RowDefinitions.Add(rowDifinition);
             }
 
             if (card.imageQuestionPath != null)
@@ -257,7 +264,7 @@ namespace Obuchanik
                 img.Source = new BitmapImage(new Uri(card.imageQuestionPath, UriKind.Relative));
 
                 Grid.SetRow(img, 0);
-                gridForQuestion.Children.Add(img);
+                grid.Children.Add(img);
             }
 
             if (card.question != null)
@@ -269,7 +276,7 @@ namespace Obuchanik
                     HorizontalAlignment = HorizontalAlignment.Center,
                 };
                 Grid.SetRow(label, 1);
-                gridForQuestion.Children.Add(label);
+                grid.Children.Add(label);
             }
 
             Border borderForQuestion = new Border()
@@ -277,15 +284,87 @@ namespace Obuchanik
                 CornerRadius = new CornerRadius(20),
                 Padding = new Thickness(10),
                 Background = new SolidColorBrush(Colors.White),
-                Child = gridForQuestion,
+                Child = grid,
             };
             Border bigBorderForQuestion = new Border()
             {
                 Child = borderForQuestion,
                 Padding = new Thickness(100, 10, 100, 10),
             };
-            Grid.SetRow(bigBorderForQuestion, 0);
-            mainGrid.Children.Add(bigBorderForQuestion);
+
+            return bigBorderForQuestion;
+        }
+
+        private Border GetCardAnswer(Card card)
+        {
+            Grid grid = new Grid();
+            for (int i = 0; i < 2; i++)
+            {
+                RowDefinition rowDifinition = new RowDefinition();
+                grid.RowDefinitions.Add(rowDifinition);
+            }
+
+            if (card.imageAnswerPath != null)
+            {
+                Image img = new Image();
+                img.Source = new BitmapImage(new Uri(card.imageAnswerPath, UriKind.Relative));
+
+                Grid.SetRow(img, 0);
+                grid.Children.Add(img);
+            }
+
+            if (card.question != null)
+            {
+                Label label = new Label()
+                {
+                    Content = card.answer,
+                    FontSize = 30,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                };
+                Grid.SetRow(label, 1);
+                grid.Children.Add(label);
+            }
+
+            Border borderForAnswer = new Border()
+            {
+                CornerRadius = new CornerRadius(20),
+                Padding = new Thickness(10),
+                Background = new SolidColorBrush(Colors.White),
+                Child = grid,
+            };
+            Border bigBorderForAnswer = new Border()
+            {
+                Child = borderForAnswer,
+                Padding = new Thickness(100, 10, 100, 10),
+            };
+
+            return bigBorderForAnswer;
+        }
+
+        private void ShowCard(Card card)
+        {
+            curCard = card; // Как правильно делать? Нельзя ли передать card в обработчик нажатия на кнопку?
+            mainGrid.Children.Clear();
+            mainGrid.VerticalAlignment = VerticalAlignment.Top;
+            mainGrid.RowDefinitions.Clear();
+            mainGrid.ShowGridLines = false;
+            for (int i = 0; i < 4; i++)
+            {
+                RowDefinition rowDifinition = new RowDefinition();
+                mainGrid.RowDefinitions.Add(rowDifinition);
+            }
+            mainGrid.RowDefinitions[2].Height = new GridLength(150);
+            mainGrid.RowDefinitions[1].Height = new GridLength(100);
+            mainGrid.RowDefinitions[0].Height = new GridLength(450);
+
+            borderForQuestion = GetCardQuestion(card);
+            borderForAnswer = GetCardAnswer(card);
+            borderForAnswer.Visibility = Visibility.Hidden;
+
+            Grid.SetRow(borderForQuestion, 0);
+            Grid.SetRow(borderForAnswer, 0);
+            mainGrid.Children.Add(borderForQuestion);
+            mainGrid.Children.Add(borderForAnswer);
             mainGrid.Children[0].SetValue(Grid.ColumnProperty, 0);
             mainGrid.Children[0].SetValue(Grid.RowProperty, 0);
 
@@ -311,13 +390,13 @@ namespace Obuchanik
             Button showAnswerBtn = new Button()
             {
                 Style = (Style)FindResource("RoundButton"),
-                Content = "Показать ответ",
+                Content = "Перевернуть карточку",
                 FontSize = 20,
                 Background = new SolidColorBrush(Color.FromRgb(223, 238, 132)),
                 Height = 40,
-                Width = 200,
+                Width = 230,
             };
-            showAnswerBtn.Click += new RoutedEventHandler(Btn_ShowAnswer_Click);
+            showAnswerBtn.Click += new RoutedEventHandler(Btn_coup_Click);
             Grid.SetColumn(showAnswerBtn, 1);
             gridForInformationAboutCard.Children.Add(showAnswerBtn);
 
@@ -336,7 +415,7 @@ namespace Obuchanik
             if (card.statusCard == Status.Failed)
             {
                 status = "Не изучено";
-                colorBrush = new SolidColorBrush(Color.FromRgb(221, 26, 84));
+                colorBrush = new SolidColorBrush(Color.FromRgb(252, 110, 153));
             }
 
             Label labelStatus = new Label()
@@ -424,6 +503,21 @@ namespace Obuchanik
             };
             Grid.SetRow(borderForButtons, 2);
             mainGrid.Children.Add(borderForButtons);
+
+            Image img = new Image();
+            img.Source = new BitmapImage(new Uri("next.png", UriKind.Relative));
+            Button buttonNextCard = new Button()
+            {
+                Style = (Style)FindResource("RoundButton"),
+                Height = 50,
+                Width = 50,
+                Background = new SolidColorBrush(Color.FromRgb(244, 252, 196)),
+                Content = img,
+                HorizontalAlignment = HorizontalAlignment.Center,
+            };
+            buttonNextCard.Click += new RoutedEventHandler(BtnNextCard_Click);
+            Grid.SetRow(buttonNextCard, 3);
+            mainGrid.Children.Add(buttonNextCard);
         }
 
         private void CreateNewCard()

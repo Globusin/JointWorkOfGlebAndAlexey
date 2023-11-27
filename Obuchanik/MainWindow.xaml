@@ -50,6 +50,11 @@
 
         <Border x:Name="BorderMain" CornerRadius="10" Background="#F4FCC4" Margin="10,10,10,10" Grid.Column="3" Grid.ColumnSpan="2">
             <Grid x:Name="mainGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Image Source="/main.png" Height="700"></Image>
             </Grid>
         </Border>
     </Grid>
