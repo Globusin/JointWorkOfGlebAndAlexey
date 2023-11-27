@@ -32,6 +32,7 @@ namespace Obuchanik
         string imageQuestPath;
         Border borderForQuestion;
         Border borderForAnswer;
+        string NameBtnFordelete = null;
 
         Dictionary<string, Action<string>> callerDict = new Dictionary<string, Action<string>>();
 
@@ -60,6 +61,8 @@ namespace Obuchanik
             current.Background = new SolidColorBrush(Color.FromRgb(114, 201, 238));
 
             callerDict[current.Name].Invoke(current.Name);
+
+            NameBtnFordelete = current.Name;
 
             OpenSelectTest(current.Name);
         }
@@ -783,6 +786,33 @@ namespace Obuchanik
             }
 
             MessageBox.Show("Данные сохранены");
+        }
+
+        private void Btn_Delete_Click(object sender, RoutedEventArgs e)
+        {
+            mainGrid.Children.Clear();
+            
+            foreach (var item in StPnTests.Children)
+            {
+                Button btn = (Button)item;
+                if (btn.Name == NameBtnFordelete)
+                {
+                    StPnTests.Children.Remove((Button)item);
+                    break;
+                }
+            }
+
+            foreach (var items in listTest)
+            {
+                if (items.nameTest == NameBtnFordelete)
+                {
+                    listTest.Remove(items);
+                    callerDict.Remove(items.nameTest);
+                    break;
+                }
+            }
+
+            SaveData("DataSerialize", listTest);
         }
     }
 }
