@@ -12,6 +12,7 @@ namespace Obuchanik
         public string imageAnswerPath;
         public string question = "";
         public string answer = "";
+        public Status statusCard = Status.Incomplete;
 
         public Card() { }
 

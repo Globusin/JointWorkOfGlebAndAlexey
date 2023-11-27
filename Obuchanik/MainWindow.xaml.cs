@@ -16,6 +16,7 @@ using System.Collections;
 using static System.Net.Mime.MediaTypeNames;
 using Image = System.Windows.Controls.Image;
 using System.ComponentModel;
+using System.Security.Cryptography;
 
 namespace Obuchanik
 {
@@ -56,6 +57,8 @@ namespace Obuchanik
         private void BtnTest_Clic(object sender, RoutedEventArgs e)
         {
             Button current = (Button)sender;
+            current.Name = current.Content.ToString();
+            current.Background = new SolidColorBrush(Color.FromRgb(114, 201, 238));
 
             callerDict[current.Name].Invoke(current.Name);
 
@@ -68,19 +71,15 @@ namespace Obuchanik
             mainGrid.Children.Clear();
             mainGrid.VerticalAlignment = VerticalAlignment.Top;
             mainGrid.RowDefinitions.Clear();
-            mainGrid.ShowGridLines = true;
+            mainGrid.ShowGridLines = false;
             countOfCards = 0;
 
             countTests++;
             btnNewTest = new Button()
             {
                 Content = "Новый тест " + $"{countTests}",
-                Name = "Test" + $"{countTests}",
                 Style = (Style)FindResource("TestButton")
             };
-            callerDict.Add(btnNewTest.Name, OpenSelectTest);
-            btnNewTest.Click += new RoutedEventHandler(BtnTest_Clic);
-            StPnTests.Children.Add(btnNewTest);
 
             //создание строк в цикле
             for (int i = 0; i < 5; i++)
@@ -148,28 +147,26 @@ namespace Obuchanik
         //обрабочик для кнопки стрелочки
         private void BtnNextStep_Clic(object sender, RoutedEventArgs e)
         {
+            btnNewTest.Name = textBoxForName.Text;
+            btnNewTest.Content = btnNewTest.Name;
+            callerDict.Add(btnNewTest.Name, OpenSelectTest);
+            btnNewTest.Click += new RoutedEventHandler(BtnTest_Clic);
+            StPnTests.Children.Add(btnNewTest);
+
             CreateNewCard();
         }
 
         private void BtnEndOfNewTestCreation_Click(object sender, RoutedEventArgs e)
         {
-            addCard(); ////////////////////////////// Надо ли?
+            AddCard();
             listTest.Add(test);
             SaveData("DataSerialize", listTest);
             mainGrid.Children.Clear();
-
-            //if (StPnTests.Children.Count > 0)
-            //    StPnTests.Children.RemoveAt(StPnTests.Children.Count - 1);
-
-            //foreach (var item in listTest)
-            //{
-            //    AddTestOnStPn(item);
-            //}
         }
 
         private void addCardButton_Clic(object sender, RoutedEventArgs e)
         {
-            addCard();
+            AddCard();
             CreateNewCard();
         }
 
@@ -228,7 +225,6 @@ namespace Obuchanik
             //по ключу Name теста
 
             test = listTest.FindAll(x => x.nameTest == name)[0];
-
             mainGrid.Children.Clear();
             ShowCard(test.cards[0]);
         }
@@ -238,12 +234,15 @@ namespace Obuchanik
             mainGrid.Children.Clear();
             mainGrid.VerticalAlignment = VerticalAlignment.Top;
             mainGrid.RowDefinitions.Clear();
-            mainGrid.ShowGridLines = true;
+            mainGrid.ShowGridLines = false;
             for (int i = 0; i < 5; i++)
             {
                 RowDefinition rowDifinition = new RowDefinition();
                 mainGrid.RowDefinitions.Add(rowDifinition);
             }
+            mainGrid.RowDefinitions[2].Height = new GridLength(150);
+            mainGrid.RowDefinitions[1].Height = new GridLength(100);
+            mainGrid.RowDefinitions[0].Height = new GridLength(500);
 
             Grid gridForQuestion = new Grid();
             for (int i = 0; i < 2; i++)
@@ -283,7 +282,7 @@ namespace Obuchanik
             Border bigBorderForQuestion = new Border()
             {
                 Child = borderForQuestion,
-                Padding = new Thickness(10),
+                Padding = new Thickness(100, 10, 100, 10),
             };
             Grid.SetRow(bigBorderForQuestion, 0);
             mainGrid.Children.Add(bigBorderForQuestion);
@@ -298,9 +297,14 @@ namespace Obuchanik
                 gridForInformationAboutCard.ColumnDefinitions.Add(colDifinition);
             }
 
-            Label labelNumCard = new Label();
             int curCardNumber = test.cards.IndexOf(card);
-            labelNumCard.Content = $"Карточка {curCardNumber}/{test.cards.Count}";
+            Label labelNumCard = new Label()
+            {
+                Content = $"Карточка: {curCardNumber + 1}/{test.cards.Count}",
+                FontSize = 15,
+                Margin = new Thickness(100, 10, 10, 10),
+                VerticalAlignment = VerticalAlignment.Center
+            };
             Grid.SetColumn(labelNumCard, 0);
             gridForInformationAboutCard.Children.Add(labelNumCard);
 
@@ -308,112 +312,118 @@ namespace Obuchanik
             {
                 Style = (Style)FindResource("RoundButton"),
                 Content = "Показать ответ",
+                FontSize = 20,
                 Background = new SolidColorBrush(Color.FromRgb(223, 238, 132)),
                 Height = 40,
-                Width = 120,
+                Width = 200,
             };
             showAnswerBtn.Click += new RoutedEventHandler(Btn_ShowAnswer_Click);
             Grid.SetColumn(showAnswerBtn, 1);
             gridForInformationAboutCard.Children.Add(showAnswerBtn);
 
+            SolidColorBrush colorBrush = null;
+            string status = null;
+            if (card.statusCard == Status.Passed)
+            {
+                status = "Изучено";
+                colorBrush = new SolidColorBrush(Color.FromRgb(162, 242, 160));
+            }
+            if (card.statusCard == Status.Incomplete)
+            {
+                status = "Повторим";
+                colorBrush = new SolidColorBrush(Color.FromRgb(255, 207, 82));
+            }
+            if (card.statusCard == Status.Failed)
+            {
+                status = "Не изучено";
+                colorBrush = new SolidColorBrush(Color.FromRgb(221, 26, 84));
+            }
+
+            Label labelStatus = new Label()
+            {
+                Content = $"{status}",
+                FontSize = 15,
+                HorizontalAlignment = HorizontalAlignment.Center,
+            };
+            Border borderForStatus = new Border()
+            {
+                CornerRadius = new CornerRadius(10),
+                Background = colorBrush,
+                Child = labelStatus,
+                Height = 30,
+                Width = 100,
+                HorizontalAlignment= HorizontalAlignment.Stretch,
+            };
+            Grid.SetColumn(borderForStatus, 2);
+            gridForInformationAboutCard.Children.Add(borderForStatus);
+
             Grid.SetRow(gridForInformationAboutCard, 1);
             mainGrid.Children.Add(gridForInformationAboutCard);
 
-            Grid gridForBtnOkNotOkDontKnow = new Grid();
-            gridForBtnOkNotOkDontKnow.HorizontalAlignment = HorizontalAlignment.Stretch;
+            //////////////////////////////////////////////////////ы
 
+            Grid gridForBtnOkNotOkDontKnow = new Grid();
             for (int i = 0; i < 3; i++)
             {
                 ColumnDefinition colDifinition = new ColumnDefinition();
                 gridForBtnOkNotOkDontKnow.ColumnDefinitions.Add(colDifinition);
             }
 
-            Grid.SetRow(gridForBtnOkNotOkDontKnow, 2);
-
-            Border borderForBtnOk = new Border()
-            {
-                CornerRadius = new CornerRadius(100),
-                Padding = new Thickness(30)
-            };
-
-            Grid.SetColumn(borderForBtnOk, 0);
-
             Image imgOK = new Image();
-            imgOK.Source = new BitmapImage(new Uri("galochka.png", UriKind.Relative));
+            imgOK.Source = new BitmapImage(new Uri("galochka1.png", UriKind.Relative));
             Button btnOK = new Button()
             {
                 Name = "BtnOK",
-                //Margin = new Thickness(120, 300, 600, 360),
+                HorizontalAlignment = HorizontalAlignment.Center,
                 Style = (Style)FindResource("RoundButton"),
                 Content = imgOK,
-                Background = new SolidColorBrush(Colors.LightGreen),
-                FontSize = 10,
-                Width = 90,
-                Height = 90
+                Background = new SolidColorBrush(Color.FromRgb(244, 252, 196)),
+                Width = 110,
+                Height = 110
             };
             btnOK.Click += new RoutedEventHandler(Btn_OK_Click);
-            borderForBtnOk.Child = btnOK;
-            gridForBtnOkNotOkDontKnow.Children.Add(borderForBtnOk);
-
-            //Grid.SetColumn(btnOK, 0);
-            //gridForBtnOkNotOkDontKnow.Children.Add(btnOK);
+            Grid.SetColumn(btnOK, 0);
+            gridForBtnOkNotOkDontKnow.Children.Add(btnOK);
 
             Image imgNotOK = new Image();
-            imgNotOK.Source = new BitmapImage(new Uri("Krestik.png", UriKind.Relative));
+            imgNotOK.Source = new BitmapImage(new Uri("Krestik1.png", UriKind.Relative));
             Button btnNotOK = new Button()
             {
                 Name = "BtnNotOK",
-                //Margin = new Thickness(560, 300, 130, 375),
+                HorizontalAlignment= HorizontalAlignment.Center,
                 Style = (Style)FindResource("RoundButton"),
                 Content = imgNotOK,
-                Background = new SolidColorBrush(Colors.LightCoral),
-                FontSize = 50,
-                Width = 90,
-                Height = 90
+                Background = new SolidColorBrush(Color.FromRgb(244, 252, 196)),
+                Width = 110,
+                Height = 110
             };
             btnNotOK.Click += new RoutedEventHandler(Btn_NotOK_Click);
-
-            Border borderForBtnNotOk = new Border()
-            {
-                CornerRadius = new CornerRadius(100),
-                Padding = new Thickness(30)
-            };
-
-            Grid.SetColumn(borderForBtnNotOk, 2);
-            borderForBtnNotOk.Child = btnNotOK;
-            gridForBtnOkNotOkDontKnow.Children.Add(borderForBtnNotOk);
-
-            //Grid.SetColumn(btnNotOK, 2);
-            //gridForBtnOkNotOkDontKnow.Children.Add(btnNotOK);
+            Grid.SetColumn(btnOK, 2);
+            gridForBtnOkNotOkDontKnow.Children.Add(btnNotOK);
 
             Image imgDontKnow = new Image();
-            imgDontKnow.Source = new BitmapImage(new Uri("VoprosZnak.png", UriKind.Relative));
+            imgDontKnow.Source = new BitmapImage(new Uri("VoprosZnak1.png", UriKind.Relative));
             Button btnDontKnow = new Button()
             {
                 Name = "btnDontKnow",
+                HorizontalAlignment = HorizontalAlignment.Center,
                 Style = (Style)FindResource("RoundButton"),
                 Content = imgDontKnow,
-                Background = new SolidColorBrush(Colors.LightYellow),
-                FontSize = 50,
-                Width = 90,
-                Height = 90
+                Background = new SolidColorBrush(Color.FromRgb(244, 252, 196)),
+                Width = 110,
+                Height = 110
             };
             btnDontKnow.Click += new RoutedEventHandler(Btn_DontKnow_Click);
+            Grid.SetColumn(btnDontKnow, 1);
+            gridForBtnOkNotOkDontKnow.Children.Add(btnDontKnow);
 
-            Border borderForBtnDontKnow = new Border()
+            Border borderForButtons = new Border()
             {
-                CornerRadius = new CornerRadius(100),
-                Padding = new Thickness(30)
+                Padding = new Thickness(20),
+                Child = gridForBtnOkNotOkDontKnow,
             };
-
-            Grid.SetColumn(borderForBtnDontKnow, 1);
-            borderForBtnDontKnow.Child = btnDontKnow;
-            gridForBtnOkNotOkDontKnow.Children.Add(borderForBtnDontKnow);
-
-            //Grid.SetColumn(btnDontKnow, 1);
-            //gridForBtnOkNotOkDontKnow.Children.Add(btnDontKnow);
-
-            mainGrid.Children.Add(gridForBtnOkNotOkDontKnow);
+            Grid.SetRow(borderForButtons, 2);
+            mainGrid.Children.Add(borderForButtons);
         }
 
         private void CreateNewCard()
@@ -615,7 +625,7 @@ namespace Obuchanik
             mainGrid.Children.Add(subGrid2);
         }
 
-        private void addCard()
+        private void AddCard()
         {
             Card newCard = new Card(textBoxForQuestion.Text, textBoxForAnswer.Text);
 
