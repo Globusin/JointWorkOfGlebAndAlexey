@@ -16,7 +16,7 @@ namespace Obuchanik
     {
         public Test() { }
 
-        public string nameTest;
+        public string nameTest = null;
 
         public Status statusTest = Status.Incomplete;
 

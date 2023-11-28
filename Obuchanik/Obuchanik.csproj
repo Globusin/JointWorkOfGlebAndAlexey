@@ -126,10 +126,10 @@
     <Resource Include="main.PNG" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Urn.png" />
+    <Resource Include="Delete.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Delete.png" />
+    <Resource Include="IconDesktop.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

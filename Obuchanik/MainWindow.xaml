@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Obuchanik"
         mc:Ignorable="d"
-        Title="MainWindow" MinHeight="820" MinWidth="1000" Width="100" Background="#DFEE84" WindowStartupLocation="CenterScreen" Height="798.133">
+        Title="MainWindow" MinHeight="820" MinWidth="1000" Width="100" Background="#DFEE84" WindowStartupLocation="CenterScreen" Height="798.133" Icon="IconDesktop.png">
     <Grid ShowGridLines="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,-0.4,49.6">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="143" />

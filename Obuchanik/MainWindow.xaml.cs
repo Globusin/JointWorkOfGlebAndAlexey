@@ -33,6 +33,7 @@ namespace Obuchanik
         Border borderForQuestion;
         Border borderForAnswer;
         string NameBtnFordelete = null;
+        string strForName = null;
 
         Dictionary<string, Action<string>> callerDict = new Dictionary<string, Action<string>>();
 
@@ -57,7 +58,7 @@ namespace Obuchanik
                 button.Background = new SolidColorBrush(Color.FromRgb(223, 238, 132));
             }
             Button current = (Button)sender;
-            current.Name = current.Content.ToString();
+            //current.Name = current.Content.ToString();
             current.Background = new SolidColorBrush(Color.FromRgb(114, 201, 238));
 
             callerDict[current.Name].Invoke(current.Name);
@@ -149,8 +150,10 @@ namespace Obuchanik
         //обрабочик для кнопки стрелочки
         private void BtnNextStep_Clic(object sender, RoutedEventArgs e)
         {
-            btnNewTest.Name = textBoxForName.Text.ToString();
-            btnNewTest.Content = btnNewTest.Name;
+            string txtBoxstrName = textBoxForName.Text.Replace(" ", "");
+
+            btnNewTest.Name = txtBoxstrName;
+            btnNewTest.Content = textBoxForName.Text.ToString();
             callerDict.Add(btnNewTest.Name, OpenSelectTest);
             btnNewTest.Click += new RoutedEventHandler(BtnTest_Clic);
             StPnTests.Children.Add(btnNewTest);
@@ -224,16 +227,50 @@ namespace Obuchanik
             ShowCard(test.cards[(index + 1) % test.cards.Count]);
         }
 
+        private void Btn_Delete_Click(object sender, RoutedEventArgs e)
+        {
+            mainGrid.Children.Clear();
+
+            foreach (var item in StPnTests.Children)
+            {
+                Button btn = (Button)item;
+                if (btn.Name == NameBtnFordelete.Replace(" ", ""))
+                {
+                    StPnTests.Children.Remove((Button)item);
+                    break;
+                }
+            }
+
+            foreach (var items in listTest)
+            {
+                if (items.nameTest.Replace(" ", "") == NameBtnFordelete.Replace(" ", ""))
+                {
+                    listTest.Remove(items);
+                    callerDict.Remove(items.nameTest);
+                    break;
+                }
+            }
+
+            using (FileStream fs = new FileStream("DataSerialize", FileMode.OpenOrCreate))
+            {
+                fs.SetLength(0);
+            }
+
+            SaveData("DataSerialize", listTest);
+        }
+
         //////////////////////// Методы:
 
         public void AddTestOnStPn(Test test)
         {
             countTests++;
 
+            strForName = test.nameTest.Replace(" ", "");
+
             btnNewTest = new Button()
             {
                 Content = test.nameTest,
-                Name = test.nameTest,
+                Name = strForName,
                 Style = (Style)FindResource("TestButton")
             };
 
@@ -247,7 +284,7 @@ namespace Obuchanik
             //вывод тестов сохраненных в классе Test из List<Test>
             //по ключу Name теста
 
-            test = listTest.FindAll(x => x.nameTest == name)[0];
+            test = listTest.FindAll(x => x.nameTest.Replace(" ", "") == name)[0];
             mainGrid.Children.Clear();
             ShowCard(test.cards[0]);
         }
@@ -786,33 +823,6 @@ namespace Obuchanik
             }
 
             MessageBox.Show("Данные сохранены");
-        }
-
-        private void Btn_Delete_Click(object sender, RoutedEventArgs e)
-        {
-            mainGrid.Children.Clear();
-            
-            foreach (var item in StPnTests.Children)
-            {
-                Button btn = (Button)item;
-                if (btn.Name == NameBtnFordelete)
-                {
-                    StPnTests.Children.Remove((Button)item);
-                    break;
-                }
-            }
-
-            foreach (var items in listTest)
-            {
-                if (items.nameTest == NameBtnFordelete)
-                {
-                    listTest.Remove(items);
-                    callerDict.Remove(items.nameTest);
-                    break;
-                }
-            }
-
-            SaveData("DataSerialize", listTest);
         }
     }
 }
