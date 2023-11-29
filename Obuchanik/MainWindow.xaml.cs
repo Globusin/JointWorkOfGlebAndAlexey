@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -52,13 +53,11 @@ namespace Obuchanik
         //для открытия теста
         private void BtnTest_Clic(object sender, RoutedEventArgs e)
         {
-            foreach (var item in StPnTests.Children)
-            {
-                Button button = (Button)item;
-                button.Background = new SolidColorBrush(Color.FromRgb(223, 238, 132));
-            }
+            ColorStPn();
+            if (!mainGrid.Children.Contains(mainImage))
+                SaveData("DataSerialize", listTest);
+
             Button current = (Button)sender;
-            //current.Name = current.Content.ToString();
             current.Background = new SolidColorBrush(Color.FromRgb(114, 201, 238));
 
             callerDict[current.Name].Invoke(current.Name);
@@ -71,6 +70,14 @@ namespace Obuchanik
         //обработчик кнопки для добавления новых тестов
         private void Btn_clic_plus(object sender, RoutedEventArgs e)
         {
+            foreach (var item in StPnTests.Children)
+            {
+                Button btn = (Button)item;
+
+                btn.Visibility = Visibility.Hidden;
+            }
+
+            ColorStPn();
             mainGrid.Children.Clear();
             mainGrid.VerticalAlignment = VerticalAlignment.Top;
             mainGrid.RowDefinitions.Clear();
@@ -156,6 +163,7 @@ namespace Obuchanik
             btnNewTest.Content = textBoxForName.Text.ToString();
             callerDict.Add(btnNewTest.Name, OpenSelectTest);
             btnNewTest.Click += new RoutedEventHandler(BtnTest_Clic);
+            btnNewTest.Visibility = Visibility.Hidden;
             StPnTests.Children.Add(btnNewTest);
 
             CreateNewCard();
@@ -167,6 +175,13 @@ namespace Obuchanik
             listTest.Add(test);
             SaveData("DataSerialize", listTest);
             mainGrid.Children.Clear();
+
+            foreach (var item in StPnTests.Children)
+            {
+                Button btn = (Button)item;
+
+                btn.Visibility = Visibility.Visible;
+            }
         }
 
         private void addCardButton_Clic(object sender, RoutedEventArgs e)
@@ -207,7 +222,7 @@ namespace Obuchanik
         }
 
         //обработчик вывода правильного ответа карточки
-        private void Btn_coup_Click(object sender, RoutedEventArgs e)
+        private void Btn_Coup_Click(object sender, RoutedEventArgs e)
         {
             if (borderForAnswer.Visibility == Visibility.Visible)
             {
@@ -259,7 +274,21 @@ namespace Obuchanik
             SaveData("DataSerialize", listTest);
         }
 
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            SaveData("DataSerialize", listTest);
+        }
+
         //////////////////////// Методы:
+
+        public void ColorStPn()
+        {
+            foreach (var item in StPnTests.Children)
+            {
+                Button button = (Button)item;
+                button.Background = new SolidColorBrush(Color.FromRgb(223, 238, 132));
+            }
+        }
 
         public void AddTestOnStPn(Test test)
         {
@@ -292,6 +321,7 @@ namespace Obuchanik
         private Border GetCardQuestion(Card card)
         {
             Grid grid = new Grid();
+            grid.VerticalAlignment = VerticalAlignment.Stretch;
             for (int i = 0; i < 2; i++)
             {
                 RowDefinition rowDifinition = new RowDefinition();
@@ -301,10 +331,16 @@ namespace Obuchanik
             if (card.imageQuestionPath != null)
             {
                 Image img = new Image();
-                img.Source = new BitmapImage(new Uri(card.imageQuestionPath, UriKind.Relative));
-
-                Grid.SetRow(img, 0);
-                grid.Children.Add(img);
+                try
+                {
+                    img.Source = new BitmapImage(new Uri(card.imageQuestionPath));
+                    Grid.SetRow(img, 0);
+                    grid.Children.Add(img);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Картинка для вопроса не найдена");
+                }
             }
 
             if (card.question != null)
@@ -338,6 +374,7 @@ namespace Obuchanik
         private Border GetCardAnswer(Card card)
         {
             Grid grid = new Grid();
+            grid.VerticalAlignment = VerticalAlignment.Stretch;
             for (int i = 0; i < 2; i++)
             {
                 RowDefinition rowDifinition = new RowDefinition();
@@ -347,10 +384,16 @@ namespace Obuchanik
             if (card.imageAnswerPath != null)
             {
                 Image img = new Image();
-                img.Source = new BitmapImage(new Uri(card.imageAnswerPath, UriKind.Relative));
-
-                Grid.SetRow(img, 0);
-                grid.Children.Add(img);
+                try
+                {
+                    img.Source = new BitmapImage(new Uri(card.imageQuestionPath));
+                    Grid.SetRow(img, 0);
+                    grid.Children.Add(img);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Картинка для ответа не найдена");
+                }
             }
 
             if (card.question != null)
@@ -436,7 +479,7 @@ namespace Obuchanik
                 Height = 40,
                 Width = 230,
             };
-            showAnswerBtn.Click += new RoutedEventHandler(Btn_coup_Click);
+            showAnswerBtn.Click += new RoutedEventHandler(Btn_Coup_Click);
             Grid.SetColumn(showAnswerBtn, 1);
             gridForInformationAboutCard.Children.Add(showAnswerBtn);
 
@@ -479,7 +522,7 @@ namespace Obuchanik
             Grid.SetRow(gridForInformationAboutCard, 1);
             mainGrid.Children.Add(gridForInformationAboutCard);
 
-            //////////////////////////////////////////////////////ы
+            //////////////////////////////////////////////////////
 
             Grid gridForBtnOkNotOkDontKnow = new Grid();
             for (int i = 0; i < 3; i++)
