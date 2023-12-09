@@ -31,7 +31,7 @@
                         <Frame DockPanel.Dock="Bottom"/>
                     </DockPanel>
                 </ScrollViewer>
-                <Button Grid.Row="2" Height="40" Width="40" Background="#F4FCC4" Margin="87,5.2,10,4.4" Click="Btn_clic_plus">
+                <Button x:Name="BtnPlus" Grid.Row="2" Height="40" Width="40" Background="#F4FCC4" Margin="87,5.2,10,4.4" Click="Btn_clic_plus">
                     <Image Source="/plus.png"></Image>
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
@@ -46,7 +46,7 @@
                         </Style>
                     </Button.Resources>
                 </Button>
-                <Button Grid.Row="2" Grid.Column="0" Width="40" Height="40" Margin="0,5,89,-0.4" Background="#F4FCC4" Click="Btn_Delete_Click" RenderTransformOrigin="0.517,0.547">
+                <Button x:Name="BtnBasket" Grid.Row="2" Grid.Column="0" Width="40" Height="40" Margin="0,5,89,-0.4" Background="#F4FCC4" Click="Btn_Delete_Click" RenderTransformOrigin="0.517,0.547">
                     <Image Source="/Delete.png"></Image>
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
