@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Obuchanik"
         mc:Ignorable="d"
-        Title="Обучальник" MinHeight="820" MinWidth="1000" Width="100" Background="#DFEE84" WindowStartupLocation="CenterScreen" Height="798.133" Icon="IconDesktop.png"
+        Title="Обучальник" MinHeight="820" MinWidth="1000" Width="100" Background="#DFEE84" WindowStartupLocation="CenterScreen" Height="798.133" Icon="Source/IconDesktop.png"
         Closing="Window_Closing">
     <Grid ShowGridLines="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,-0.4,49.6">
         <Grid.ColumnDefinitions>
@@ -32,7 +32,7 @@
                     </DockPanel>
                 </ScrollViewer>
                 <Button x:Name="BtnPlus" Grid.Row="2" Height="40" Width="40" Background="#F4FCC4" Margin="87,5.2,10,4.4" Click="Btn_clic_plus">
-                    <Image Source="/plus.png"></Image>
+                    <Image Source="/Source/plus.png"></Image>
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border CornerRadius="15" Background="{TemplateBinding Background}">
@@ -47,7 +47,7 @@
                     </Button.Resources>
                 </Button>
                 <Button x:Name="BtnBasket" Grid.Row="2" Grid.Column="0" Width="40" Height="40" Margin="0,5,89,-0.4" Background="#F4FCC4" Click="Btn_Delete_Click" RenderTransformOrigin="0.517,0.547">
-                    <Image Source="/Delete.png"></Image>
+                    <Image Source="/Source/Delete.png"></Image>
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border CornerRadius="15" Background="{TemplateBinding Background}">
@@ -73,7 +73,7 @@
                     <RowDefinition Height="42*"/>
                 </Grid.RowDefinitions>
 
-                <Image x:Name="mainImage" Source="/main.png" Margin="0,58,0,-0.4" Grid.RowSpan="4"/>
+                <Image x:Name="mainImage" Source="/Source/main.png" Margin="0,58,0,-0.4" Grid.RowSpan="4"/>
             </Grid>
         </Border>
     </Grid>

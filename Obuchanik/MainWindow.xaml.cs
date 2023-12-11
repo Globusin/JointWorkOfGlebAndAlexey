@@ -142,7 +142,7 @@ namespace Obuchanik
             mainGrid.Children.Add(textBoxForName);
 
             Image img = new Image();
-            img.Source = new BitmapImage(new Uri("next.png", UriKind.Relative));
+            img.Source = new BitmapImage(new Uri("Source/next.png", UriKind.Relative));
             BtnNextStep = new Button()
             {
                 Style = (Style)FindResource("RoundButton"),
@@ -582,7 +582,7 @@ namespace Obuchanik
             }
 
             Image imgOK = new Image();
-            imgOK.Source = new BitmapImage(new Uri("galochka1.png", UriKind.Relative));
+            imgOK.Source = new BitmapImage(new Uri("Source/galochka1.png", UriKind.Relative));
             Button btnOK = new Button()
             {
                 Name = "BtnOK",
@@ -598,7 +598,7 @@ namespace Obuchanik
             gridForBtnOkNotOkDontKnow.Children.Add(btnOK);
 
             Image imgNotOK = new Image();
-            imgNotOK.Source = new BitmapImage(new Uri("Krestik1.png", UriKind.Relative));
+            imgNotOK.Source = new BitmapImage(new Uri("Source/Krestik1.png", UriKind.Relative));
             Button btnNotOK = new Button()
             {
                 Name = "BtnNotOK",
@@ -614,7 +614,7 @@ namespace Obuchanik
             gridForBtnOkNotOkDontKnow.Children.Add(btnNotOK);
 
             Image imgDontKnow = new Image();
-            imgDontKnow.Source = new BitmapImage(new Uri("VoprosZnak1.png", UriKind.Relative));
+            imgDontKnow.Source = new BitmapImage(new Uri("Source/VoprosZnak1.png", UriKind.Relative));
             Button btnDontKnow = new Button()
             {
                 Name = "btnDontKnow",
@@ -638,7 +638,7 @@ namespace Obuchanik
             mainGrid.Children.Add(borderForButtons);
 
             Image img = new Image();
-            img.Source = new BitmapImage(new Uri("next.png", UriKind.Relative));
+            img.Source = new BitmapImage(new Uri("Source/next.png", UriKind.Relative));
             Button buttonNextCard = new Button()
             {
                 Style = (Style)FindResource("RoundButton"),
@@ -794,7 +794,7 @@ namespace Obuchanik
             }
 
             Image img = new Image();
-            img.Source = new BitmapImage(new Uri("plus.png", UriKind.Relative));
+            img.Source = new BitmapImage(new Uri("Source/plus.png", UriKind.Relative));
             Button addCardButton = new Button()
             {
                 Style = (Style)FindResource("RoundButton"),
@@ -809,7 +809,7 @@ namespace Obuchanik
             subGrid1.Children.Add(addCardButton);
 
             img = new Image();
-            img.Source = new BitmapImage(new Uri("next.png", UriKind.Relative));
+            img.Source = new BitmapImage(new Uri("Source/next.png", UriKind.Relative));
             Button BtnEndOfNewTestCreation = new Button()
             {
                 Style = (Style)FindResource("RoundButton"),
