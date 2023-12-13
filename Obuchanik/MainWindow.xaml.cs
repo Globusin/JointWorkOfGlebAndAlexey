@@ -34,7 +34,6 @@ namespace Obuchanik
         Border borderForQuestion;
         Border borderForAnswer;
         string nameBtnForDelete = null;
-        string pathFolderImgTests = "./FoldersImgTests";
 
         Dictionary<string, Action<string>> callerDict = new Dictionary<string, Action<string>>();
 
@@ -188,6 +187,9 @@ namespace Obuchanik
                     btnNewTest.IsEnabled = false;
                     StPnTests.Children.Add(btnNewTest);
 
+                    Path.Combine(Directory.GetCurrentDirectory(), btnNewTest.Content.ToString());
+                    Directory.CreateDirectory(btnNewTest.Content.ToString());
+
                     CreateNewCard();
                 }
             }
@@ -197,12 +199,6 @@ namespace Obuchanik
         {
             AddCard();
             listTest.Add(test);
-
-            if(imageQuestPath != null)
-                MoveImageFolder(test.nameTest, imageQuestPath);
-
-            if(imageAnsPath != null)
-                //MoveImageFolder(test.nameTest, imageAnsPath);
 
             SaveData("DataSerialize", listTest);
             mainGrid.Children.Clear();
@@ -311,6 +307,15 @@ namespace Obuchanik
                         fs.SetLength(0);
                     }
 
+                    try
+                    {
+                        Path.Combine(Directory.GetCurrentDirectory(), nameBtnForDelete);
+                        Directory.Delete(nameBtnForDelete, true);
+                    }
+                    catch (Exception)
+                    {
+                    }
+
                     SaveData("DataSerialize", listTest);
                 }
             }
@@ -395,7 +400,6 @@ namespace Obuchanik
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("Картинка для вопроса не найдена");
                 }
             }
 
@@ -450,7 +454,6 @@ namespace Obuchanik
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("Картинка для ответа не найдена");
                 }
             }
 
@@ -484,7 +487,7 @@ namespace Obuchanik
 
         private void ShowCard(Card card)
         {
-            curCard = card; // Как правильно делать? Нельзя ли передать card в обработчик нажатия на кнопку?
+            curCard = card;
             mainGrid.Children.Clear();
             mainGrid.VerticalAlignment = VerticalAlignment.Top;
             mainGrid.RowDefinitions.Clear();
@@ -885,7 +888,13 @@ namespace Obuchanik
             openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
-                return openFileDialog.FileName;
+                string folderPath = Path.Combine(Directory.GetCurrentDirectory(), test.nameTest);
+                string filePath = openFileDialog.FileName;
+                string fileName = Path.GetFileName(filePath);
+
+                if (!File.Exists(folderPath + $@"\{fileName}"))
+                    File.Copy(filePath, folderPath + $@"\{fileName}");
+                return folderPath + $@"\{fileName}";
             }
             return null;
         }
@@ -912,14 +921,6 @@ namespace Obuchanik
             {
                 xmlSerialaze.Serialize(fs, listTest);
             }
-        }
-
-        public void MoveImageFolder(string nameTest, string pathImg)
-        {
-            if(!Directory.Exists(pathFolderImgTests + "/" + nameTest))
-                Directory.Move(pathImg, pathFolderImgTests + "/" + nameTest);
-
-            //Directory.Move(pathImg, pathFolderImgTests + "/" + nameTest);
         }
     }
 }
