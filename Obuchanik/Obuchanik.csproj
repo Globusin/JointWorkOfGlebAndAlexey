@@ -99,37 +99,31 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="plus.png" />
+    <Resource Include="Source\Delete.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="next.png" />
+    <Resource Include="Source\galochka1.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="galochka.png" />
+    <Resource Include="Source\IconDesktop.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Krestik.png" />
+    <Resource Include="Source\Krestik1.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="VoprosZnak.png" />
+    <Resource Include="Source\main.PNG" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="galochka1.png" />
+    <Resource Include="Source\next.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Krestik1.png" />
+    <Resource Include="Source\plus.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="VoprosZnak1.png" />
+    <Resource Include="Source\VoprosZnak1.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="main.PNG" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Delete.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="IconDesktop.png" />
+    <Folder Include="FoldersImgTests\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -33,14 +33,22 @@ namespace Obuchanik
         string imageQuestPath;
         Border borderForQuestion;
         Border borderForAnswer;
-        string NameBtnFordelete = null;
-        string strForName = null;
+        string nameBtnForDelete = null;
+        string pathFolderImgTests = "./FoldersImgTests";
 
         Dictionary<string, Action<string>> callerDict = new Dictionary<string, Action<string>>();
 
         public MainWindow()
         {
-            listTest = GetData("DataSerialize");
+            try
+            {
+                listTest = GetData("DataSerialize");
+            }
+            catch (Exception)
+            {
+                SaveData("DataSerialize", listTest);
+            }
+            
             InitializeComponent();
             
             foreach (var item in listTest)
@@ -57,24 +65,26 @@ namespace Obuchanik
             if (!mainGrid.Children.Contains(mainImage))
                 SaveData("DataSerialize", listTest);
 
-            Button current = (Button)sender;
-            current.Background = new SolidColorBrush(Color.FromRgb(114, 201, 238));
+            Button currentBtn = (Button)sender;
+            currentBtn.Background = new SolidColorBrush(Color.FromRgb(114, 201, 238));
 
-            callerDict[current.Name].Invoke(current.Name);
+            callerDict[currentBtn.Content.ToString()].Invoke(currentBtn.Content.ToString());
 
-            NameBtnFordelete = current.Name;
+            nameBtnForDelete = currentBtn.Content.ToString();
 
-            OpenSelectTest(current.Name);
+            OpenSelectTest(currentBtn.Content.ToString());
         }
 
         //обработчик кнопки для добавления новых тестов
         private void Btn_clic_plus(object sender, RoutedEventArgs e)
         {
+            BtnPlus.IsEnabled = false;
+            BtnBasket.IsEnabled = false;
             foreach (var item in StPnTests.Children)
             {
                 Button btn = (Button)item;
 
-                btn.Visibility = Visibility.Hidden;
+                btn.IsEnabled = false;
             }
 
             ColorStPn();
@@ -84,10 +94,8 @@ namespace Obuchanik
             mainGrid.ShowGridLines = false;
             countOfCards = 0;
 
-            countTests++;
             btnNewTest = new Button()
             {
-                Content = "Новый тест " + $"{countTests}",
                 Style = (Style)FindResource("TestButton")
             };
 
@@ -100,7 +108,7 @@ namespace Obuchanik
 
             NameTestLabel = new Label()
             {
-                Content = "Новый тест " + $"{countTests}",
+                Content = "Новый тест " + $"{countTests + 1}",
                 FontSize = 35,
                 Margin = new Thickness(5, 5, 5, 5),
                 HorizontalAlignment = HorizontalAlignment.Center,
@@ -135,7 +143,7 @@ namespace Obuchanik
             mainGrid.Children.Add(textBoxForName);
 
             Image img = new Image();
-            img.Source = new BitmapImage(new Uri("next.png", UriKind.Relative));
+            img.Source = new BitmapImage(new Uri("Source/next.png", UriKind.Relative));
             BtnNextStep = new Button()
             {
                 Style = (Style)FindResource("RoundButton"),
@@ -154,34 +162,60 @@ namespace Obuchanik
             test = new Test();
         }
 
-        //обрабочик для кнопки стрелочки
+        //обрабочик для кнопки стрелочки при создании нового теста
         private void BtnNextStep_Clic(object sender, RoutedEventArgs e)
         {
-            string txtBoxstrName = textBoxForName.Text.Replace(" ", "");
+            if (textBoxForName.Text == "")
+            {
+                MessageBox.Show("Имя теста не должно быть пустым");
+                ToStartScreen();
+            }
+            else
+            {
+                btnNewTest.Content = textBoxForName.Text.ToString();
+                if (callerDict.ContainsKey(btnNewTest.Content.ToString()))
+                {
+                    MessageBox.Show("Тест с таким именем уже есть");
 
-            btnNewTest.Name = txtBoxstrName;
-            btnNewTest.Content = textBoxForName.Text.ToString();
-            callerDict.Add(btnNewTest.Name, OpenSelectTest);
-            btnNewTest.Click += new RoutedEventHandler(BtnTest_Clic);
-            btnNewTest.Visibility = Visibility.Hidden;
-            StPnTests.Children.Add(btnNewTest);
+                    countTests--;
+                    ToStartScreen();
+                }
+                else
+                {
+                    countTests++;
+                    callerDict.Add(btnNewTest.Content.ToString(), OpenSelectTest);
+                    btnNewTest.Click += new RoutedEventHandler(BtnTest_Clic);
+                    btnNewTest.IsEnabled = false;
+                    StPnTests.Children.Add(btnNewTest);
 
-            CreateNewCard();
+                    CreateNewCard();
+                }
+            }
         }
 
         private void BtnEndOfNewTestCreation_Click(object sender, RoutedEventArgs e)
         {
             AddCard();
             listTest.Add(test);
+
+            if(imageQuestPath != null)
+                MoveImageFolder(test.nameTest, imageQuestPath);
+
+            if(imageAnsPath != null)
+                //MoveImageFolder(test.nameTest, imageAnsPath);
+
             SaveData("DataSerialize", listTest);
             mainGrid.Children.Clear();
 
+            BtnPlus.IsEnabled = true;
+            BtnBasket.IsEnabled = true;
             foreach (var item in StPnTests.Children)
             {
                 Button btn = (Button)item;
 
-                btn.Visibility = Visibility.Visible;
+                btn.IsEnabled = true;
             }
+            nameBtnForDelete = null;
         }
 
         private void addCardButton_Clic(object sender, RoutedEventArgs e)
@@ -244,34 +278,42 @@ namespace Obuchanik
 
         private void Btn_Delete_Click(object sender, RoutedEventArgs e)
         {
-            mainGrid.Children.Clear();
-
-            foreach (var item in StPnTests.Children)
+            if (nameBtnForDelete != null)
             {
-                Button btn = (Button)item;
-                if (btn.Name == NameBtnFordelete.Replace(" ", ""))
+                MessageBoxResult result = MessageBox.Show("Вы хотите удалить тест?", "Подтверждение", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
                 {
-                    StPnTests.Children.Remove((Button)item);
-                    break;
+                    mainGrid.Children.Clear();
+                    countTests--;
+
+                    foreach (var item in StPnTests.Children)
+                    {
+                        Button btn = (Button)item;
+                        if (btn.Content.ToString() == nameBtnForDelete)
+                        {
+                            StPnTests.Children.Remove((Button)item);
+                            break;
+                        }
+                    }
+
+                    foreach (var items in listTest)
+                    {
+                        if (items.nameTest == nameBtnForDelete)
+                        {
+                            listTest.Remove(items);
+                            callerDict.Remove(items.nameTest);
+                            break;
+                        }
+                    }
+
+                    using (FileStream fs = new FileStream("DataSerialize", FileMode.OpenOrCreate))
+                    {
+                        fs.SetLength(0);
+                    }
+
+                    SaveData("DataSerialize", listTest);
                 }
             }
-
-            foreach (var items in listTest)
-            {
-                if (items.nameTest.Replace(" ", "") == NameBtnFordelete.Replace(" ", ""))
-                {
-                    listTest.Remove(items);
-                    callerDict.Remove(items.nameTest);
-                    break;
-                }
-            }
-
-            using (FileStream fs = new FileStream("DataSerialize", FileMode.OpenOrCreate))
-            {
-                fs.SetLength(0);
-            }
-
-            SaveData("DataSerialize", listTest);
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -280,6 +322,21 @@ namespace Obuchanik
         }
 
         //////////////////////// Методы:
+
+        public void ToStartScreen()
+        {
+            mainGrid.Children.Clear();
+
+            BtnPlus.IsEnabled = true;
+            BtnBasket.IsEnabled = true;
+            foreach (var item in StPnTests.Children)
+            {
+                Button btn = (Button)item;
+
+                btn.IsEnabled = true;
+            }
+            nameBtnForDelete = null;
+        }
 
         public void ColorStPn()
         {
@@ -294,16 +351,13 @@ namespace Obuchanik
         {
             countTests++;
 
-            strForName = test.nameTest.Replace(" ", "");
-
             btnNewTest = new Button()
             {
                 Content = test.nameTest,
-                Name = strForName,
                 Style = (Style)FindResource("TestButton")
             };
 
-            callerDict.Add(btnNewTest.Name, OpenSelectTest);
+            callerDict.Add(btnNewTest.Content.ToString(), OpenSelectTest);
             btnNewTest.Click += new RoutedEventHandler(BtnTest_Clic);
             StPnTests.Children.Add(btnNewTest);
         }
@@ -313,7 +367,7 @@ namespace Obuchanik
             //вывод тестов сохраненных в классе Test из List<Test>
             //по ключу Name теста
 
-            test = listTest.FindAll(x => x.nameTest.Replace(" ", "") == name)[0];
+            test = listTest.FindAll(x => x.nameTest == name)[0];
             mainGrid.Children.Clear();
             ShowCard(test.cards[0]);
         }
@@ -334,6 +388,8 @@ namespace Obuchanik
                 try
                 {
                     img.Source = new BitmapImage(new Uri(card.imageQuestionPath));
+                    img.HorizontalAlignment = HorizontalAlignment.Stretch;
+                    img.VerticalAlignment = VerticalAlignment.Stretch;
                     Grid.SetRow(img, 0);
                     grid.Children.Add(img);
                 }
@@ -386,7 +442,9 @@ namespace Obuchanik
                 Image img = new Image();
                 try
                 {
-                    img.Source = new BitmapImage(new Uri(card.imageQuestionPath));
+                    img.Source = new BitmapImage(new Uri(card.imageAnswerPath));
+                    img.HorizontalAlignment = HorizontalAlignment.Stretch;
+                    img.VerticalAlignment = VerticalAlignment.Stretch;
                     Grid.SetRow(img, 0);
                     grid.Children.Add(img);
                 }
@@ -396,7 +454,7 @@ namespace Obuchanik
                 }
             }
 
-            if (card.question != null)
+            if (card.answer != null)
             {
                 Label label = new Label()
                 {
@@ -532,7 +590,7 @@ namespace Obuchanik
             }
 
             Image imgOK = new Image();
-            imgOK.Source = new BitmapImage(new Uri("galochka1.png", UriKind.Relative));
+            imgOK.Source = new BitmapImage(new Uri("Source/galochka1.png", UriKind.Relative));
             Button btnOK = new Button()
             {
                 Name = "BtnOK",
@@ -548,7 +606,7 @@ namespace Obuchanik
             gridForBtnOkNotOkDontKnow.Children.Add(btnOK);
 
             Image imgNotOK = new Image();
-            imgNotOK.Source = new BitmapImage(new Uri("Krestik1.png", UriKind.Relative));
+            imgNotOK.Source = new BitmapImage(new Uri("Source/Krestik1.png", UriKind.Relative));
             Button btnNotOK = new Button()
             {
                 Name = "BtnNotOK",
@@ -564,7 +622,7 @@ namespace Obuchanik
             gridForBtnOkNotOkDontKnow.Children.Add(btnNotOK);
 
             Image imgDontKnow = new Image();
-            imgDontKnow.Source = new BitmapImage(new Uri("VoprosZnak1.png", UriKind.Relative));
+            imgDontKnow.Source = new BitmapImage(new Uri("Source/VoprosZnak1.png", UriKind.Relative));
             Button btnDontKnow = new Button()
             {
                 Name = "btnDontKnow",
@@ -588,7 +646,7 @@ namespace Obuchanik
             mainGrid.Children.Add(borderForButtons);
 
             Image img = new Image();
-            img.Source = new BitmapImage(new Uri("next.png", UriKind.Relative));
+            img.Source = new BitmapImage(new Uri("Source/next.png", UriKind.Relative));
             Button buttonNextCard = new Button()
             {
                 Style = (Style)FindResource("RoundButton"),
@@ -744,7 +802,7 @@ namespace Obuchanik
             }
 
             Image img = new Image();
-            img.Source = new BitmapImage(new Uri("plus.png", UriKind.Relative));
+            img.Source = new BitmapImage(new Uri("Source/plus.png", UriKind.Relative));
             Button addCardButton = new Button()
             {
                 Style = (Style)FindResource("RoundButton"),
@@ -759,7 +817,7 @@ namespace Obuchanik
             subGrid1.Children.Add(addCardButton);
 
             img = new Image();
-            img.Source = new BitmapImage(new Uri("next.png", UriKind.Relative));
+            img.Source = new BitmapImage(new Uri("Source/next.png", UriKind.Relative));
             Button BtnEndOfNewTestCreation = new Button()
             {
                 Style = (Style)FindResource("RoundButton"),
@@ -815,19 +873,9 @@ namespace Obuchanik
             test.AddCard(newCard);
         }
 
-        private string chooseImageButton_Click(object sender, RoutedEventArgs e)
+        private string ChooseImageButton_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-
-            // фильтр для выбора только картинки - файлы соответсвующих форматов
-            openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png|All files (*.*)|*.*";
-
-            if (openFileDialog.ShowDialog() == true)
-            {
-                return openFileDialog.FileName;
-            }
-
-            return null;
+            return LoadImage();
         }
 
         private string LoadImage()
@@ -852,7 +900,7 @@ namespace Obuchanik
             {
                 tests = xmlDeserilizer.Deserialize(fs) as List<Test>;
             }
-            
+
             return tests;
         }
 
@@ -864,8 +912,14 @@ namespace Obuchanik
             {
                 xmlSerialaze.Serialize(fs, listTest);
             }
+        }
 
-            MessageBox.Show("Данные сохранены");
+        public void MoveImageFolder(string nameTest, string pathImg)
+        {
+            if(!Directory.Exists(pathFolderImgTests + "/" + nameTest))
+                Directory.Move(pathImg, pathFolderImgTests + "/" + nameTest);
+
+            //Directory.Move(pathImg, pathFolderImgTests + "/" + nameTest);
         }
     }
 }
