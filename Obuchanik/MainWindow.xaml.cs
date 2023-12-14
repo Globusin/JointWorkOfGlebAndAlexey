@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -164,9 +165,9 @@ namespace Obuchanik
         //обрабочик для кнопки стрелочки при создании нового теста
         private void BtnNextStep_Clic(object sender, RoutedEventArgs e)
         {
-            if (textBoxForName.Text == "")
+            if (textBoxForName.Text == "" || !Regex.IsMatch(textBoxForName.Text, "^[^\\/:*?\"<>|+]+$", RegexOptions.IgnoreCase))
             {
-                MessageBox.Show("Имя теста не должно быть пустым");
+                MessageBox.Show("Некорректное имя теста");
                 ToStartScreen();
             }
             else
@@ -174,7 +175,7 @@ namespace Obuchanik
                 btnNewTest.Content = textBoxForName.Text.ToString();
                 if (callerDict.ContainsKey(btnNewTest.Content.ToString()))
                 {
-                    MessageBox.Show("Тест с таким именем уже есть");
+                    MessageBox.Show("Тест с таким именем уже есть"); 
 
                     countTests--;
                     ToStartScreen();
