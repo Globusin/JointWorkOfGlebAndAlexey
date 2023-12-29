@@ -4,13 +4,22 @@
 winexe
 C#
 .cs
+<<<<<<< HEAD
 C:\Local_Rep_KB3\GlebAndAlexey\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\
+=======
+H:\Project\JointWorkOfGlebAndAlexey\Obuchanik\obj\Debug\
+>>>>>>> 76e866490e10dabacd42c43a7ff1a7b88df1103a
 Obuchanik
 none
 false
 DEBUG;TRACE
+<<<<<<< HEAD
 C:\Local_Rep_KB3\GlebAndAlexey\JointWorkOfGlebAndAlexey\Obuchanik\App.xaml
 11151548125
+=======
+H:\Project\JointWorkOfGlebAndAlexey\Obuchanik\App.xaml
+1219584333
+>>>>>>> 76e866490e10dabacd42c43a7ff1a7b88df1103a
 
 8152659790
 131569487696
